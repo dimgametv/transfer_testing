@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CloudShare | 10GB Secure Transfer</title>
     <style>
-        :root { --glass: rgba(255, 255, 255, 0.1); --border: rgba(255, 255, 255, 0.2); --accent: #4ecca3; }
+        :root { 
+            --glass: rgba(255, 255, 255, 0.1); 
+            --border: rgba(255, 255, 255, 0.2); 
+            --accent: #4ecca3; 
+            --danger: #ff4e4e;
+        }
         body {
             margin: 0; height: 100vh; display: flex; align-items: center; justify-content: center;
             background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
@@ -16,32 +21,43 @@
             border: 1px solid var(--border); border-radius: 28px;
             padding: 40px; width: 420px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
-        h1 { font-weight: 600; margin-bottom: 10px; letter-spacing: -1px; }
+        h1 { font-weight: 600; margin-bottom: 5px; letter-spacing: -1px; }
         .subtitle { font-size: 0.85rem; opacity: 0.6; margin-bottom: 30px; }
+        
         .upload-area {
             border: 2px dashed var(--border); border-radius: 18px;
             padding: 50px 20px; cursor: pointer; transition: 0.3s;
+            margin-bottom: 20px;
         }
         .upload-area:hover { background: rgba(255, 255, 255, 0.05); border-color: var(--accent); }
         #fileInput { display: none; }
+
         .btn {
             background: var(--accent); border: none; padding: 16px; border-radius: 12px;
             color: #1a1a2e; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem;
-            transition: transform 0.2s;
+            transition: 0.2s;
         }
-        .btn:active { transform: scale(0.98); }
         .btn:disabled { background: #555; cursor: not-allowed; color: #888; }
+
         .progress-container { display: none; margin-top: 25px; text-align: left; }
         .progress-bar { background: var(--border); height: 8px; border-radius: 10px; overflow: hidden; }
         #progressFill { height: 100%; background: var(--accent); width: 0%; transition: 0.1s; }
+        
         #shareLinkBox { 
             margin-top: 25px; padding: 15px; background: rgba(0,0,0,0.4); 
             border-radius: 12px; display: none; text-align: left;
         }
         .link-text { font-size: 0.8rem; word-break: break-all; color: var(--accent); margin-bottom: 10px; display: block; }
+        
+        .status-badge {
+            display: inline-block; padding: 4px 10px; border-radius: 20px;
+            font-size: 0.7rem; font-weight: bold; background: rgba(255,255,255,0.1);
+            margin-top: 10px;
+        }
+
         .copy-btn {
             background: transparent; border: 1px solid var(--accent); color: var(--accent);
-            padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 0.7rem;
+            padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem;
         }
     </style>
 </head>
@@ -49,7 +65,7 @@
 
 <div class="glass-card">
     <h1>CloudShare</h1>
-    <p class="subtitle">Secure 10GB P2P-Style Transfer</p>
+    <p class="subtitle">Secure 10GB Transfer with Instant Deletion</p>
     
     <div class="upload-area" id="dropZone">
         <p id="fileNameDisplay">Drop file here or click to browse</p>
@@ -58,30 +74,41 @@
 
     <div class="progress-container" id="progressContainer">
         <div class="progress-bar"><div id="progressFill"></div></div>
-        <p id="statusText" style="font-size: 0.75rem; margin-top: 8px; opacity: 0.8;">Preparing...</p>
+        <p id="statusText" style="font-size: 0.75rem; margin-top: 8px; opacity: 0.8;">Preparing upload...</p>
     </div>
 
     <div id="shareLinkBox">
-        <span style="font-size: 0.75rem; opacity: 0.6;">DOWNLOAD LINK (One-time use):</span>
+        <span style="font-size: 0.75rem; opacity: 0.6;">DOWNLOAD LINK:</span>
         <span class="link-text" id="finalLink"></span>
-        <button class="copy-btn" id="copyBtn">Copy Link</button>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <button class="copy-btn" id="copyBtn">Copy Link</button>
+            <div id="liveStatus" class="status-badge">Waiting for recipient...</div>
+        </div>
     </div>
 
-    <button class="btn" id="uploadBtn" style="margin-top: 20px;">Generate Link</button>
+    <button class="btn" id="uploadBtn">Generate Secure Link</button>
 </div>
 
 <script>
-    const API_URL = "https://snowy-recipe-1d49.indielumo.workers.dev"; 
+    // CONFIGURATION
+    const API_URL = "https://snowy-recipe-1d49.indielumo.workers.dev";
+    // Replace with your Firebase URL from your project settings
+    const FIREBASE_DB = "https://your-project-id.firebaseio.com"; 
+
     const fileInput = document.getElementById('fileInput');
     const uploadBtn = document.getElementById('uploadBtn');
     const progressFill = document.getElementById('progressFill');
     const statusText = document.getElementById('statusText');
     const shareLinkBox = document.getElementById('shareLinkBox');
     const finalLink = document.getElementById('finalLink');
+    const liveStatus = document.getElementById('liveStatus');
 
     document.getElementById('dropZone').onclick = () => fileInput.click();
+    
     fileInput.onchange = (e) => {
-        if(e.target.files[0]) document.getElementById('fileNameDisplay').innerText = e.target.files[0].name;
+        if(e.target.files[0]) {
+            document.getElementById('fileNameDisplay').innerText = e.target.files[0].name;
+        }
     };
 
     uploadBtn.onclick = async () => {
@@ -93,9 +120,11 @@
         shareLinkBox.style.display = 'none';
 
         try {
+            // 1. Get the Key and Proxy URL from Worker
             const res = await fetch(`${API_URL}/get-upload-url?filename=${encodeURIComponent(file.name)}`);
             const { uploadUrl, fileKey } = await res.json();
 
+            // 2. Upload with XHR to track real-time progress
             const xhr = new XMLHttpRequest();
             xhr.open('PUT', uploadUrl, true);
             
@@ -109,27 +138,50 @@
 
             xhr.onload = () => {
                 if (xhr.status === 200) {
-                    statusText.innerText = "Upload successful! File ready for recipient.";
+                    statusText.innerText = "Upload successful!";
                     shareLinkBox.style.display = 'block';
                     const downloadUrl = `${API_URL}/download/${fileKey}`;
                     finalLink.innerText = downloadUrl;
                     
+                    // Start Live Tracking
+                    startLiveTracking(fileKey);
+
                     document.getElementById('copyBtn').onclick = () => {
                         navigator.clipboard.writeText(downloadUrl);
                         document.getElementById('copyBtn').innerText = "Copied!";
+                        setTimeout(() => document.getElementById('copyBtn').innerText = "Copy Link", 2000);
                     };
                 } else {
-                    alert("Transfer failed. Please check your Worker R2 binding.");
+                    alert("Transfer failed. Check Worker console.");
                 }
                 uploadBtn.disabled = false;
             };
 
             xhr.send(file);
         } catch (err) {
-            alert("Error connecting to Cloudflare. Check your API_URL.");
+            alert("Error connecting to CloudShare engine.");
             uploadBtn.disabled = false;
         }
     };
+
+    function startLiveTracking(fileKey) {
+        // Poll Firebase to see if the status changes to 'downloaded'
+        const interval = setInterval(async () => {
+            try {
+                const res = await fetch(`${FIREBASE_DB}/transfers/${fileKey}.json`);
+                const data = await res.json();
+                
+                if (data && data.status === 'downloaded') {
+                    liveStatus.innerText = "✅ FILE DOWNLOADED & DELETED";
+                    liveStatus.style.background = "rgba(255, 78, 78, 0.2)";
+                    liveStatus.style.color = "#ff4e4e";
+                    clearInterval(interval);
+                }
+            } catch (e) {
+                console.error("Tracking error:", e);
+            }
+        }, 3000); // Check every 3 seconds
+    }
 </script>
 </body>
 </html>
