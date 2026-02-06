@@ -1,1 +1,584 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><title>SENDRA | By XRV LABS</title><link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script><style>:root{--bg-color:#e0e5ec;--text-main:#4a4a4a;--text-sub:#899bb5;--accent-color:#4ecca3;--error-color:#ff6b6b;--warning-color:#f1c40f;--shadow-outer:5px 5px 10px rgba(163,177,198,0.3),-5px -5px 10px rgba(255,255,255,0.6);--shadow-inner:inset 4px 4px 8px rgb(163,177,198,0.7),inset -4px -4px 8px rgba(255,255,255,0.8);--card-radius:20px}[data-theme="dark"]{--bg-color:#272b33;--text-main:#edf2f7;--text-sub:#a0aec0;--accent-color:#00f2c3;--shadow-outer:6px 6px 16px rgba(0,0,0,0.4),-6px -6px 16px rgba(255,255,255,0.04);--shadow-inner:inset 3px 3px 8px rgba(0,0,0,0.6),inset -3px -3px 8px rgba(255,255,255,0.04)}*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{background-color:var(--bg-color);font-family:'Exo 2',sans-serif;color:var(--text-main);min-height:100vh;overflow-x:hidden;display:flex;flex-direction:column;align-items:center;padding-bottom:40px}header{width:90%;max-width:1200px;display:flex;justify-content:space-between;align-items:center;padding:20px 0;margin-bottom:10px}.logo-container{display:flex;flex-direction:column}.logo{font-weight:900;color:var(--text-main);text-transform:uppercase;font-family:'Orbitron';font-size:1.5rem;letter-spacing:1px}.logo-sub{font-size:0.7rem;color:var(--text-sub);font-weight:600;letter-spacing:2px;margin-top:2px}.header-btns{display:flex;gap:10px}.icon-btn{height:45px;width:45px;border-radius:12px;border:none;background:var(--bg-color);box-shadow:var(--shadow-outer);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-main);font-size:1.2rem}.icon-btn:active{box-shadow:var(--shadow-inner);transform:scale(0.95)}.tabs{width:90%;max-width:500px;display:flex;gap:10px;margin-bottom:15px}.tab-btn{flex:1;padding:12px;border:none;border-radius:12px;background:var(--bg-color);box-shadow:var(--shadow-outer);cursor:pointer;font-family:'Orbitron';font-size:0.75rem;font-weight:700;color:var(--text-sub);transition:all 0.3s}.tab-btn.active{box-shadow:var(--shadow-inner);color:var(--accent-color)}.tab-btn:hover{color:var(--accent-color)}.main-card{width:90%;max-width:500px;background:var(--bg-color);border-radius:var(--card-radius);padding:30px;box-shadow:var(--shadow-outer);text-align:center}h1{font-family:'Orbitron';margin-bottom:5px;color:var(--text-main);font-size:1.8rem}.subtitle{color:var(--text-sub);margin-bottom:20px;font-size:0.85rem;letter-spacing:1px;font-weight:600}.upload-area{background:var(--bg-color);border-radius:15px;padding:35px 20px;margin-bottom:20px;cursor:pointer;box-shadow:var(--shadow-inner);border:2px dashed rgba(160,174,192,0.2);color:var(--text-sub);transition:all 0.3s;position:relative}.upload-area:active,.upload-area.dragover{border-color:var(--accent-color);color:var(--accent-color)}.upload-area p{font-weight:700;font-size:0.95rem}.file-info{font-size:0.75rem;opacity:0.8;margin-top:8px;font-family:'Orbitron';letter-spacing:1px}#fileInput,#folderInput{display:none}.options-section{background:var(--bg-color);border-radius:15px;padding:20px;margin-bottom:20px;box-shadow:var(--shadow-inner);text-align:left}.options-title{font-family:'Orbitron';font-size:0.8rem;color:var(--text-sub);margin-bottom:15px;display:flex;align-items:center;gap:8px}.option-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.05)}.option-row:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}.option-label{font-size:0.85rem;color:var(--text-main);display:flex;align-items:center;gap:8px}.option-input{background:var(--bg-color);border:none;border-radius:8px;padding:10px 12px;color:var(--text-main);font-family:'Exo 2';font-size:0.85rem;box-shadow:var(--shadow-inner);width:140px;outline:none}.option-input::placeholder{color:var(--text-sub)}.option-select{background:var(--bg-color);border:none;border-radius:8px;padding:10px 12px;color:var(--text-main);font-family:'Exo 2';font-size:0.85rem;box-shadow:var(--shadow-inner);width:140px;outline:none;cursor:pointer}.toggle-switch{position:relative;width:50px;height:26px;background:var(--bg-color);border-radius:13px;box-shadow:var(--shadow-inner);cursor:pointer}.toggle-switch input{opacity:0;width:0;height:0}.toggle-slider{position:absolute;top:3px;left:3px;width:20px;height:20px;background:var(--text-sub);border-radius:50%;transition:all 0.3s}.toggle-switch input:checked+.toggle-slider{left:27px;background:var(--accent-color);box-shadow:0 0 10px var(--accent-color)}.file-queue{background:var(--bg-color);border-radius:15px;padding:15px;margin-bottom:20px;box-shadow:var(--shadow-inner);max-height:200px;overflow-y:auto;display:none}.queue-title{font-family:'Orbitron';font-size:0.75rem;color:var(--text-sub);margin-bottom:10px;display:flex;justify-content:space-between}.queue-item{display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--bg-color);border-radius:10px;margin-bottom:8px;box-shadow:var(--shadow-outer)}.queue-item:last-child{margin-bottom:0}.queue-item-name{font-size:0.8rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:10px}.queue-item-size{font-size:0.7rem;color:var(--text-sub);font-family:'Orbitron'}.queue-item-remove{background:none;border:none;color:var(--error-color);cursor:pointer;font-size:1rem;padding:5px}.btn{width:100%;padding:16px 0;border:none;border-radius:25px;background:var(--bg-color);box-shadow:var(--shadow-outer);color:var(--accent-color);font-family:'Orbitron';font-weight:900;font-size:0.95rem;letter-spacing:1px;cursor:pointer;transition:all 0.2s;text-transform:uppercase;margin-bottom:10px}.btn:active:not(:disabled){box-shadow:var(--shadow-inner);transform:scale(0.98)}.btn:disabled{opacity:0.5;cursor:not-allowed}.btn.secondary{color:var(--text-sub);font-size:0.85rem}.btn.pause{color:var(--warning-color)}.btn.danger{color:var(--error-color)}.progress-section{margin-top:20px;text-align:left;display:none}.progress-bar-bg{width:100%;height:12px;background:var(--bg-color);box-shadow:var(--shadow-inner);border-radius:6px;overflow:hidden;margin:10px 0}.progress-fill{height:100%;width:0%;background:var(--accent-color);box-shadow:0 0 15px var(--accent-color);transition:width 0.3s}.progress-text{display:flex;justify-content:space-between;font-size:0.8rem;font-family:'Orbitron';color:var(--text-main);font-weight:700}.speed-info{font-size:0.7rem;color:var(--text-sub);text-align:center;margin-top:8px;font-weight:600}.success-box{margin-top:20px;display:none}.status-box{padding:20px;border-radius:15px;font-size:0.85rem;background:var(--bg-color);box-shadow:var(--shadow-inner);text-align:left}.verify-info{color:var(--accent-color);margin-bottom:5px;font-weight:700;font-family:'Orbitron';font-size:0.8rem}.share-url{background:var(--bg-color);box-shadow:var(--shadow-inner);border-radius:10px;padding:12px;margin:15px 0;word-break:break-all;font-size:0.75rem;color:var(--text-sub);font-family:monospace}.qr-container{text-align:center;margin:20px 0}.qr-code{background:white;padding:15px;border-radius:10px;display:inline-block}.qr-label{font-size:0.7rem;color:var(--text-sub);margin-bottom:10px}.analytics-box{margin-top:15px;padding:15px;background:var(--bg-color);box-shadow:var(--shadow-inner);border-radius:12px}.analytics-title{font-family:'Orbitron';font-size:0.75rem;color:var(--text-sub);margin-bottom:10px}.analytics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.analytics-item{text-align:center;padding:10px;background:var(--bg-color);border-radius:8px;box-shadow:var(--shadow-outer)}.analytics-value{font-family:'Orbitron';font-size:1rem;color:var(--accent-color)}.analytics-label{font-size:0.65rem;color:var(--text-sub);margin-top:3px}.error-msg{color:var(--error-color);margin-top:20px;display:none;padding:15px;text-align:center;font-weight:700;font-family:'Orbitron';font-size:0.85rem;background:rgba(255,107,107,0.1);border-radius:10px;border:1px solid var(--error-color)}.history-section{display:none}.history-list{max-height:400px;overflow-y:auto}.history-item{background:var(--bg-color);box-shadow:var(--shadow-outer);border-radius:12px;padding:15px;margin-bottom:12px}.history-item-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}.history-item-name{font-size:0.9rem;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.history-item-date{font-size:0.7rem;color:var(--text-sub)}.history-item-info{display:flex;gap:15px;font-size:0.75rem;color:var(--text-sub);margin-bottom:10px}.history-item-actions{display:flex;gap:8px}.history-btn{padding:8px 12px;border:none;border-radius:8px;background:var(--bg-color);box-shadow:var(--shadow-outer);cursor:pointer;font-size:0.7rem;font-family:'Orbitron';color:var(--text-sub)}.history-btn:active{box-shadow:var(--shadow-inner)}.history-btn.primary{color:var(--accent-color)}.history-btn.danger{color:var(--error-color)}.history-empty{text-align:center;padding:40px;color:var(--text-sub)}.paused-uploads{margin-bottom:20px;display:none}.paused-title{font-family:'Orbitron';font-size:0.8rem;color:var(--warning-color);margin-bottom:10px;display:flex;align-items:center;gap:8px}.paused-item{display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--bg-color);box-shadow:var(--shadow-outer);border-radius:10px;margin-bottom:8px}.paused-item-info{flex:1}.paused-item-name{font-size:0.85rem;margin-bottom:3px}.paused-item-progress{font-size:0.7rem;color:var(--text-sub)}.paused-item-actions{display:flex;gap:8px}.paused-btn{padding:8px 12px;border:none;border-radius:8px;background:var(--bg-color);box-shadow:var(--shadow-outer);cursor:pointer;font-size:0.75rem;font-family:'Orbitron'}.paused-btn.resume{color:var(--accent-color)}.paused-btn.cancel{color:var(--error-color)}footer{margin-top:30px;color:var(--text-sub);font-size:0.7rem;text-align:center;opacity:0.6}@media(max-width:600px){header{padding:15px 0;width:92%}.tabs{width:92%}.main-card{width:92%;padding:25px 20px}.logo{font-size:1.3rem}h1{font-size:1.5rem}.option-row{flex-direction:column;align-items:flex-start;gap:8px}.option-input,.option-select{width:100%}}</style></head><body><header><div class="logo-container"><div class="logo">SENDRA</div><div class="logo-sub">BY XRV LABS</div></div><div class="header-btns"><button class="icon-btn" id="themeToggle" title="Toggle Theme">🌙</button></div></header><div class="tabs"><button class="tab-btn active" data-tab="upload">📤 UPLOAD</button><button class="tab-btn" data-tab="history">📋 HISTORY</button></div><div class="main-card"><div id="uploadSection"><h1>SENDRA</h1><p class="subtitle">SECURE ENCRYPTED TRANSFER</p><div class="paused-uploads" id="pausedUploads"><div class="paused-title">⏸️ PAUSED UPLOADS</div><div id="pausedList"></div></div><div class="upload-area" id="dropZone"><p id="fileNameDisplay">TAP OR DRAG FILES</p><p class="file-info" id="fileSizeDisplay">MAX 10GB • ENCRYPTED • AUTO-DELETE</p></div><input type="file" id="fileInput" multiple><input type="file" id="folderInput" webkitdirectory multiple><div class="file-queue" id="fileQueue"><div class="queue-title"><span>📁 FILE QUEUE</span><span id="queueCount">0 files</span></div><div id="queueList"></div></div><div class="options-section"><div class="options-title">⚙️ TRANSFER OPTIONS</div><div class="option-row"><span class="option-label">🔒 Password</span><input type="password" class="option-input" id="passwordOption" placeholder="Optional"></div><div class="option-row"><span class="option-label">⏰ Expires After</span><select class="option-select" id="expiryOption"><option value="0">Never</option><option value="1">1 Hour</option><option value="6">6 Hours</option><option value="24" selected>24 Hours</option><option value="72">3 Days</option><option value="168">7 Days</option><option value="720">30 Days</option></select></div><div class="option-row"><span class="option-label">📥 Max Downloads</span><select class="option-select" id="maxDownloadsOption"><option value="0">Unlimited</option><option value="1" selected>1 Download</option><option value="3">3 Downloads</option><option value="5">5 Downloads</option><option value="10">10 Downloads</option><option value="100">100 Downloads</option></select></div><div class="option-row"><span class="option-label">🔐 Encrypt File</span><label class="toggle-switch"><input type="checkbox" id="encryptOption" checked><span class="toggle-slider"></span></label></div></div><div class="progress-section" id="progressSection"><div class="progress-text"><span id="statusText">PREPARING...</span><span id="progressPercent">0%</span></div><div class="progress-bar-bg"><div class="progress-fill" id="progressFill"></div></div><div class="speed-info" id="speedInfo"></div></div><div class="error-msg" id="errorMsg"></div><div class="success-box" id="successBox"><div class="status-box"><div class="verify-info" id="verifyInfo"></div><div id="hashInfo" style="font-size:0.7rem;color:var(--text-sub);margin:5px 0;word-break:break-all"></div><div class="share-url" id="shareUrl"></div><div id="liveStatus" style="color:var(--text-sub);font-size:0.8rem">⏳ Waiting for recipient...</div></div><div class="qr-container"><div class="qr-label">SCAN TO DOWNLOAD</div><div class="qr-code" id="qrCode"></div></div><div class="analytics-box" id="analyticsBox"><div class="analytics-title">📊 TRANSFER ANALYTICS</div><div class="analytics-grid"><div class="analytics-item"><div class="analytics-value" id="analyticsDownloads">0</div><div class="analytics-label">Downloads</div></div><div class="analytics-item"><div class="analytics-value" id="analyticsViews">0</div><div class="analytics-label">Page Views</div></div></div></div><button class="btn" id="copyBtn">📋 COPY SHARE LINK</button><button class="btn secondary" id="newUploadBtn">📤 NEW UPLOAD</button></div><button class="btn" id="uploadBtn">🚀 START TRANSFER</button><button class="btn secondary" id="folderBtn">📁 UPLOAD FOLDER</button><div style="display:flex;gap:10px;margin-top:10px"><button class="btn pause" id="pauseBtn" style="display:none;flex:1">⏸️ PAUSE</button><button class="btn danger" id="cancelBtn" style="display:none;flex:1">✖️ CANCEL</button></div></div><div id="historySection" class="history-section"><h1 style="font-size:1.5rem;margin-bottom:20px">📋 HISTORY</h1><div class="history-list" id="historyList"><div class="history-empty">No transfer history yet</div></div></div></div><footer>© 2026 XRV LABS • SENDRA NETWORK<br>Files are end-to-end encrypted and auto-deleted after download.</footer><script type="module">import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";import{getDatabase,ref,onValue}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";const firebaseConfig={apiKey:"AIzaSyAD3J4LbHsQmvSgdLW_xaSbxjym3T-4Mw8",authDomain:"dim-transfer.firebaseapp.com",databaseURL:"https://dim-transfer-default-rtdb.firebaseio.com",projectId:"dim-transfer",storageBucket:"dim-transfer.firebasestorage.app",messagingSenderId:"429771611699",appId:"1:429771611699:web:453923495bc3b0adca8d46"};const app=initializeApp(firebaseConfig);const db=getDatabase(app);const API_URL="https://snowy-recipe-1d49.indielumo.workers.dev";const CHUNK_SIZE=50*1024*1024;const fileInput=document.getElementById('fileInput');const folderInput=document.getElementById('folderInput');const dropZone=document.getElementById('dropZone');const uploadBtn=document.getElementById('uploadBtn');const folderBtn=document.getElementById('folderBtn');const pauseBtn=document.getElementById('pauseBtn');const cancelBtn=document.getElementById('cancelBtn');const progressSection=document.getElementById('progressSection');const progressFill=document.getElementById('progressFill');const statusText=document.getElementById('statusText');const progressPercent=document.getElementById('progressPercent');const speedInfo=document.getElementById('speedInfo');const successBox=document.getElementById('successBox');const copyBtn=document.getElementById('copyBtn');const newUploadBtn=document.getElementById('newUploadBtn');const liveStatus=document.getElementById('liveStatus');const verifyInfo=document.getElementById('verifyInfo');const hashInfo=document.getElementById('hashInfo');const shareUrl=document.getElementById('shareUrl');const qrCode=document.getElementById('qrCode');const errorMsg=document.getElementById('errorMsg');const fileNameDisplay=document.getElementById('fileNameDisplay');const fileSizeDisplay=document.getElementById('fileSizeDisplay');const fileQueue=document.getElementById('fileQueue');const queueList=document.getElementById('queueList');const queueCount=document.getElementById('queueCount');const analyticsBox=document.getElementById('analyticsBox');const analyticsDownloads=document.getElementById('analyticsDownloads');const analyticsViews=document.getElementById('analyticsViews');const pausedUploads=document.getElementById('pausedUploads');const pausedList=document.getElementById('pausedList');const historyList=document.getElementById('historyList');const tabBtns=document.querySelectorAll('.tab-btn');const uploadSection=document.getElementById('uploadSection');const historySection=document.getElementById('historySection');let uploadQueue=[];let currentUploadIndex=0;let isPaused=false;let isCancelled=false;let currentFileKey=null;let currentUploadId=null;let completedParts=[];let uploadStartTime;let lastLoaded=0;let lastTime=Date.now();let encryptionKey=null;const themeToggle=document.getElementById('themeToggle');function setTheme(theme){document.documentElement.setAttribute('data-theme',theme);localStorage.setItem('theme',theme);themeToggle.textContent=theme==='dark'?'🌙':'☀️'}themeToggle.onclick=()=>{const current=document.documentElement.getAttribute('data-theme');setTheme(current==='light'?'dark':'light')};setTheme(localStorage.getItem('theme')||'dark');tabBtns.forEach(btn=>{btn.onclick=()=>{tabBtns.forEach(b=>b.classList.remove('active'));btn.classList.add('active');const tab=btn.dataset.tab;if(tab==='upload'){uploadSection.style.display='block';historySection.style.display='none'}else{uploadSection.style.display='none';historySection.style.display='block';loadHistory()}}});function sanitizeFirebaseKey(key){return key.replace(/[\.\#\$\/\[\]]/g,'_')}function formatSize(bytes){if(bytes===0)return'0 Bytes';const k=1024;const sizes=['Bytes','KB','MB','GB'];const i=Math.floor(Math.log(bytes)/Math.log(k));return parseFloat((bytes/Math.pow(k,i)).toFixed(2))+' '+sizes[i]}function formatSpeed(bps){if(bps<1024)return bps.toFixed(0)+' B/s';if(bps<1024*1024)return(bps/1024).toFixed(1)+' KB/s';return(bps/(1024*1024)).toFixed(2)+' MB/s'}function showError(msg){errorMsg.textContent='❌ '+msg;errorMsg.style.display='block';uploadBtn.style.display='block';uploadBtn.disabled=false;progressSection.style.display='none';pauseBtn.style.display='none';cancelBtn.style.display='none'}function updateProgress(percent,status,loaded,total){progressFill.style.width=percent+'%';progressPercent.textContent=Math.round(percent)+'%';if(status)statusText.textContent=status.toUpperCase();const now=Date.now();const timeDiff=(now-lastTime)/1000;if(timeDiff>0.5&&loaded){const bytesDiff=loaded-lastLoaded;const speed=bytesDiff/timeDiff;const remaining=total-loaded;const eta=speed>0?remaining/speed:0;let etaText='';if(eta>60)etaText=`~${Math.round(eta/60)}m`;else if(eta>0)etaText=`~${Math.round(eta)}s`;speedInfo.textContent=`${formatSpeed(speed)} • ${formatSize(loaded)} / ${formatSize(total)} • ${etaText}`;lastLoaded=loaded;lastTime=now}}async function generateEncryptionKey(){const key=await crypto.subtle.generateKey({name:'AES-GCM',length:256},true,['encrypt','decrypt']);return key}async function encryptFile(file,key){const iv=crypto.getRandomValues(new Uint8Array(12));const fileData=await file.arrayBuffer();const encryptedData=await crypto.subtle.encrypt({name:'AES-GCM',iv:iv},key,fileData);const combined=new Uint8Array(12+encryptedData.byteLength);combined.set(iv);combined.set(new Uint8Array(encryptedData),12);return new Blob([combined],{type:'application/octet-stream'})}async function exportKey(key){const exported=await crypto.subtle.exportKey('raw',key);return btoa(String.fromCharCode(...new Uint8Array(exported)))}async function calculateFileHash(file){const buffer=await file.arrayBuffer();const hashBuffer=await crypto.subtle.digest('SHA-256',buffer);return Array.from(new Uint8Array(hashBuffer)).map(b=>b.toString(16).padStart(2,'0')).join('')}dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('dragover')});dropZone.addEventListener('dragleave',()=>{dropZone.classList.remove('dragover')});dropZone.addEventListener('drop',e=>{e.preventDefault();dropZone.classList.remove('dragover');if(e.dataTransfer.files.length){addFilesToQueue(Array.from(e.dataTransfer.files))}});dropZone.onclick=()=>fileInput.click();folderBtn.onclick=()=>folderInput.click();fileInput.onchange=e=>{if(e.target.files.length)addFilesToQueue(Array.from(e.target.files))};folderInput.onchange=e=>{if(e.target.files.length)addFilesToQueue(Array.from(e.target.files))};function addFilesToQueue(files){files.forEach(file=>{if(file.size>10*1024*1024*1024){showError(`${file.name} exceeds 10GB limit`);return}if(!uploadQueue.find(f=>f.name===file.name&&f.size===file.size)){uploadQueue.push(file)}});updateQueueUI()}function updateQueueUI(){if(uploadQueue.length===0){fileQueue.style.display='none';fileNameDisplay.textContent='TAP OR DRAG FILES';fileSizeDisplay.textContent='MAX 10GB • ENCRYPTED • AUTO-DELETE';return}fileQueue.style.display='block';queueCount.textContent=`${uploadQueue.length} file${uploadQueue.length>1?'s':''}`;queueList.innerHTML='';uploadQueue.forEach((file,index)=>{const item=document.createElement('div');item.className='queue-item';item.innerHTML=`<span class="queue-item-name">📄 ${file.name}</span><span class="queue-item-size">${formatSize(file.size)}</span><button class="queue-item-remove" onclick="removeFromQueue(${index})">✖️</button>`;queueList.appendChild(item)});const totalSize=uploadQueue.reduce((sum,f)=>sum+f.size,0);fileNameDisplay.textContent=`${uploadQueue.length} FILE${uploadQueue.length>1?'S':''} SELECTED`;fileSizeDisplay.textContent=formatSize(totalSize)+' TOTAL'}window.removeFromQueue=function(index){uploadQueue.splice(index,1);updateQueueUI()};async function loadPausedUploads(){try{const res=await fetch(`${API_URL}/get-paused-uploads`);const data=await res.json();if(data.uploads&&data.uploads.length>0){pausedUploads.style.display='block';pausedList.innerHTML='';data.uploads.forEach(upload=>{const item=document.createElement('div');item.className='paused-item';item.innerHTML=`<div class="paused-item-info"><div class="paused-item-name">📄 ${upload.fileName}</div><div class="paused-item-progress">${upload.completedParts}/${upload.totalParts} parts • ${formatSize(upload.uploadedBytes||0)}</div></div><div class="paused-item-actions"><button class="paused-btn resume" onclick="resumePausedUpload('${upload.fileKey}')">▶️</button><button class="paused-btn cancel" onclick="cancelPausedUpload('${upload.fileKey}','${upload.uploadId}')">✖️</button></div>`;pausedList.appendChild(item)})}else{pausedUploads.style.display='none'}}catch(e){console.error('Failed to load paused uploads:',e)}}window.resumePausedUpload=async function(fileKey){try{const res=await fetch(`${API_URL}/resume-upload?fileKey=${encodeURIComponent(fileKey)}`);const pausedState=await res.json();if(pausedState.error){showError(pausedState.error);return}completedParts=pausedState.completedParts||[];currentFileKey=pausedState.fileKey;currentUploadId=pausedState.uploadId;showError('Resume not fully implemented - please re-upload')}catch(e){showError('Failed to resume: '+e.message)}};window.cancelPausedUpload=async function(fileKey,uploadId){try{await fetch(`${API_URL}/abort-upload`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fileKey,uploadId})});loadPausedUploads()}catch(e){console.error('Failed to cancel:',e)}};async function loadHistory(){try{const res=await fetch(`${API_URL}/history`);const data=await res.json();if(data.history&&data.history.length>0){historyList.innerHTML='';data.history.forEach(item=>{const div=document.createElement('div');div.className='history-item';const date=new Date(item.createdAt);const dateStr=date.toLocaleDateString()+' '+date.toLocaleTimeString();let statusBadge='';if(item.expiresAt){const expires=new Date(item.expiresAt);if(expires<new Date()){statusBadge='<span style="color:var(--error-color)">EXPIRED</span>'}else{const diff=expires-new Date();const hours=Math.floor(diff/(1000*60*60));statusBadge=`<span style="color:var(--warning-color)">${hours}h left</span>`}}div.innerHTML=`<div class="history-item-header"><span class="history-item-name">📄 ${item.fileName}</span><span class="history-item-date">${dateStr}</span></div><div class="history-item-info"><span>${formatSize(item.size)}</span>${item.encrypted?'<span>🔐 Encrypted</span>':''}${statusBadge}</div><div class="history-item-actions"><button class="history-btn primary" onclick="copyHistoryLink('${item.shareUrl}')">📋 Copy Link</button><button class="history-btn" onclick="viewAnalytics('${item.fileKey}')">📊 Analytics</button><button class="history-btn danger" onclick="deleteHistoryItem('${item.fileKey}')">🗑️ Delete</button></div>`;historyList.appendChild(div)})}else{historyList.innerHTML='<div class="history-empty">No transfer history yet</div>'}}catch(e){console.error('Failed to load history:',e);historyList.innerHTML='<div class="history-empty">Failed to load history</div>'}}window.copyHistoryLink=function(url){navigator.clipboard.writeText(url).then(()=>alert('Link copied!'))};window.viewAnalytics=async function(fileKey){try{const res=await fetch(`${API_URL}/analytics?fileKey=${encodeURIComponent(fileKey)}`);const data=await res.json();const downloads=data.events.filter(e=>e.event==='download').length;const views=data.events.filter(e=>e.event==='page_view').length;alert(`Downloads: ${downloads}\nPage Views: ${views}`)}catch(e){alert('Failed to load analytics')}};window.deleteHistoryItem=async function(fileKey){if(!confirm('Delete this from history?'))return;try{await fetch(`${API_URL}/delete-history`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fileKey})});loadHistory()}catch(e){alert('Failed to delete')}};async function uploadChunk(chunk,signedUrl,partNumber,totalParts,maxRetries=5){let lastError;for(let attempt=1;attempt<=maxRetries;attempt++){if(isCancelled)throw new Error('Upload cancelled');while(isPaused){await new Promise(r=>setTimeout(r,500));if(isCancelled)throw new Error('Upload cancelled')}try{const response=await new Promise((resolve,reject)=>{const xhr=new XMLHttpRequest();xhr.open('PUT',signedUrl,true);xhr.timeout=300000;xhr.onload=()=>{if(xhr.status===200||xhr.status===201){let etag=xhr.getResponseHeader('ETag');if(etag)etag=etag.replace(/"/g,'');resolve({success:true,etag:etag||`part-${partNumber}`})}else{reject(new Error(`Part ${partNumber} failed`))}};xhr.onerror=()=>reject(new Error('Network error'));xhr.ontimeout=()=>reject(new Error('Timeout'));xhr.send(chunk)});return response}catch(error){lastError=error;if(attempt<maxRetries){statusText.textContent=`RETRYING PART ${partNumber}...`;await new Promise(r=>setTimeout(r,2000*attempt))}}}throw lastError}async function simpleUpload(file,uploadUrl,fileKey,totalSize){return new Promise((resolve,reject)=>{const xhr=new XMLHttpRequest();xhr.open('PUT',uploadUrl,true);xhr.upload.onprogress=e=>{if(e.lengthComputable){updateProgress((e.loaded/e.total)*100,'UPLOADING...',e.loaded,e.total)}};xhr.onload=()=>{if(xhr.status===200||xhr.status===201){resolve({success:true,fileKey})}else{reject(new Error(`Upload failed: ${xhr.status}`))}};xhr.onerror=()=>reject(new Error('Network error'));xhr.send(file)})}async function multipartUpload(file,fileKey,uploadId,totalParts,chunkSize){const parts=completedParts.length>0?[...completedParts]:[];let uploadedBytes=parts.reduce((sum,p)=>sum+chunkSize,0);const startPart=parts.length+1;for(let partNumber=startPart;partNumber<=totalParts;partNumber++){if(isCancelled)throw new Error('Upload cancelled');while(isPaused){await new Promise(r=>setTimeout(r,500));if(isCancelled)throw new Error('Upload cancelled')}const start=(partNumber-1)*chunkSize;const end=Math.min(start+chunkSize,file.size);const chunk=file.slice(start,end);statusText.textContent=`GETTING URL PART ${partNumber}/${totalParts}...`;const urlRes=await fetch(`${API_URL}/get-part-url?fileKey=${encodeURIComponent(fileKey)}&uploadId=${encodeURIComponent(uploadId)}&partNumber=${partNumber}`);if(!urlRes.ok)throw new Error('Failed to get part URL');const{partUrl}=await urlRes.json();updateProgress((uploadedBytes/file.size)*100,`UPLOADING PART ${partNumber}/${totalParts}...`,uploadedBytes,file.size);const result=await uploadChunk(chunk,partUrl,partNumber,totalParts);parts.push({partNumber,etag:result.etag});completedParts=parts;uploadedBytes+=chunk.size;updateProgress((uploadedBytes/file.size)*100,`COMPLETED PART ${partNumber}`,uploadedBytes,file.size);await fetch(`${API_URL}/save-progress`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fileKey,uploadId,fileName:file.name,completedParts:parts,totalParts,uploadedBytes})})}statusText.textContent='FINALIZING...';const completeRes=await fetch(`${API_URL}/complete-upload`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fileKey,uploadId,parts})});if(!completeRes.ok)throw new Error('Failed to complete upload');return await completeRes.json()}async function verifyUpload(fileKey,expectedSize){try{const res=await fetch(`${API_URL}/info/${encodeURIComponent(fileKey)}`);if(!res.ok)return{verified:false,error:'File not found'};const data=await res.json();if(data.size===expectedSize)return{verified:true,size:data.size};return{verified:false,error:'Size mismatch'}}catch(e){return{verified:false,error:e.message}}}pauseBtn.onclick=()=>{isPaused=!isPaused;pauseBtn.textContent=isPaused?'▶️ RESUME':'⏸️ PAUSE';statusText.textContent=isPaused?'PAUSED':'RESUMING...'};cancelBtn.onclick=async()=>{if(!confirm('Cancel this upload?'))return;isCancelled=true;if(currentUploadId&&currentFileKey){try{await fetch(`${API_URL}/abort-upload`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fileKey:currentFileKey,uploadId:currentUploadId})})}catch(e){}}showError('Upload cancelled')};newUploadBtn.onclick=()=>{successBox.style.display='none';uploadBtn.style.display='block';folderBtn.style.display='block';uploadQueue=[];updateQueueUI();qrCode.innerHTML='';loadPausedUploads()};uploadBtn.onclick=async()=>{if(uploadQueue.length===0)return showError('PLEASE SELECT FILES');errorMsg.style.display='none';uploadBtn.style.display='none';folderBtn.style.display='none';successBox.style.display='none';progressSection.style.display='block';pauseBtn.style.display='inline-block';cancelBtn.style.display='inline-block';speedInfo.textContent='';isPaused=false;isCancelled=false;currentFileKey=null;currentUploadId=null;completedParts=[];uploadStartTime=Date.now();lastLoaded=0;lastTime=Date.now();const password=document.getElementById('passwordOption').value;const expiresIn=document.getElementById('expiryOption').value;const maxDownloads=document.getElementById('maxDownloadsOption').value;const shouldEncrypt=document.getElementById('encryptOption').checked;try{for(let i=0;i<uploadQueue.length;i++){const file=uploadQueue[i];statusText.textContent=`FILE ${i+1}/${uploadQueue.length}: ${file.name}`;updateProgress(0,'CALCULATING HASH...');const fileHash=await calculateFileHash(file);hashInfo.textContent=`SHA-256: ${fileHash.substring(0,16)}...${fileHash.substring(fileHash.length-16)}`;let fileToUpload=file;let exportedKey='';if(shouldEncrypt){updateProgress(0,'ENCRYPTING...');encryptionKey=await generateEncryptionKey();fileToUpload=await encryptFile(file,encryptionKey);exportedKey=await exportKey(encryptionKey)}updateProgress(0,'INITIATING...');const initRes=await fetch(`${API_URL}/initiate-upload?filename=${encodeURIComponent(file.name)}&size=${fileToUpload.size}&password=${encodeURIComponent(password)}&maxDownloads=${maxDownloads}&expiresIn=${expiresIn}&encrypted=${shouldEncrypt}&hash=${fileHash}`);if(!initRes.ok)throw new Error('Failed to initiate');const initData=await initRes.json();currentFileKey=initData.fileKey;let uploadResult;if(initData.mode==='simple'){uploadResult=await simpleUpload(fileToUpload,initData.uploadUrl,initData.fileKey,fileToUpload.size)}else{currentUploadId=initData.uploadId;uploadResult=await multipartUpload(fileToUpload,initData.fileKey,initData.uploadId,initData.totalParts,initData.chunkSize)}updateProgress(100,'VERIFYING...');const verification=await verifyUpload(initData.fileKey,fileToUpload.size);if(!verification.verified)throw new Error(`Verification failed: ${verification.error}`);const totalTime=((Date.now()-uploadStartTime)/1000).toFixed(1);updateProgress(100,`DONE IN ${totalTime}s`);progressSection.style.display='none';pauseBtn.style.display='none';cancelBtn.style.display='none';successBox.style.display='block';let fullShareUrl=initData.shareUrl;if(shouldEncrypt&&exportedKey){fullShareUrl+=`?key=${encodeURIComponent(exportedKey)}`}verifyInfo.innerHTML=`✅ VERIFIED: ${formatSize(verification.size)}`;shareUrl.textContent=fullShareUrl;qrCode.innerHTML='';if(typeof QRCode!=='undefined'){QRCode.toCanvas(document.createElement('canvas'),fullShareUrl,{width:120,margin:1},(err,canvas)=>{if(!err)qrCode.appendChild(canvas)})}copyBtn.onclick=()=>{navigator.clipboard.writeText(fullShareUrl).then(()=>{copyBtn.textContent='✅ COPIED!';setTimeout(()=>{copyBtn.textContent='📋 COPY SHARE LINK'},2000)})};const firebaseSafeKey=sanitizeFirebaseKey(initData.fileKey);const statusRef=ref(db,'transfers/'+firebaseSafeKey);onValue(statusRef,snapshot=>{const data=snapshot.val();if(data){if(data.downloadCount>0){analyticsDownloads.textContent=data.downloadCount}if(data.status==='downloaded'){liveStatus.textContent='✅ FILE DOWNLOADED!';liveStatus.style.color='var(--accent-color)'}}})}}catch(error){console.error(error);if(currentUploadId&&currentFileKey&&!isCancelled){try{await fetch(`${API_URL}/abort-upload`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fileKey:currentFileKey,uploadId:currentUploadId})})}catch(e){}}if(!isCancelled){showError(error.message||'UPLOAD FAILED')}}};loadPausedUploads()</script></body></html>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline';">
+    <title>CloudShare | Private Transfer</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- VARIABLES --- */
+        :root {
+            --bg-color: #e0e5ec;
+            --text-main: #4a4a4a;
+            --text-sub: #899bb5;
+            --accent-color: #4ecca3;
+            --error-color: #ff6b6b;
+            --placeholder-bg: #cbd5e0; 
+            --shadow-outer: 5px 5px 10px rgba(163,177,198,0.3), -5px -5px 10px rgba(255,255,255, 0.6);
+            --shadow-inner: inset 4px 4px 8px rgb(163,177,198, 0.7), inset -4px -4px 8px rgba(255,255,255, 0.8);
+            --card-radius: 20px;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #272b33; 
+            --text-main: #edf2f7;
+            --text-sub: #a0aec0;
+            --accent-color: #00f2c3; 
+            --placeholder-bg: #1a1d23; 
+            --shadow-outer: 6px 6px 16px rgba(0, 0, 0, 0.4), -6px -6px 16px rgba(255, 255, 255, 0.04); 
+            --shadow-inner: inset 3px 3px 8px rgba(0, 0, 0, 0.6), inset -3px -3px 8px rgba(255, 255, 255, 0.04);
+        }
+
+        /* --- GLOBAL RESET --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; transition: background-color 0.6s ease, color 0.6s ease, box-shadow 0.6s ease, border-radius 0.3s ease; }
+
+        body { 
+            background-color: var(--bg-color); 
+            font-family: 'Exo 2', sans-serif; 
+            color: var(--text-main); 
+            min-height: 100vh; 
+            /* Fix for mobile address bar jumpiness */
+            min-height: -webkit-fill-available;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-bottom: 40px;
+        }
+
+        html { height: -webkit-fill-available; }
+
+        /* --- HEADER --- */
+        header { 
+            width: 90%; max-width: 1200px;
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 20px 0; margin-bottom: 10px;
+        }
+
+        .logo { 
+            font-weight: 900; color: var(--text-main); text-transform: uppercase; 
+            font-family: 'Orbitron'; font-size: 1.5rem; letter-spacing: 1px;
+        }
+
+        .icon-btn { 
+            height: 45px; width: 45px; border-radius: 12px; border: none; 
+            background: var(--bg-color); box-shadow: var(--shadow-outer); 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; 
+            color: var(--text-main); transition: transform 0.2s ease, box-shadow 0.6s ease; 
+        }
+        .icon-btn svg { width: 22px; height: 22px; fill: currentColor; }
+        .icon-btn:active { box-shadow: var(--shadow-inner); transform: scale(0.95); }
+        [data-theme="dark"] .icon-sun, [data-theme="light"] .icon-moon { display: none; }
+
+        /* --- MAIN CARD --- */
+        .main-card {
+            width: 90%; max-width: 500px;
+            background: var(--bg-color);
+            border-radius: var(--card-radius);
+            padding: 40px;
+            box-shadow: var(--shadow-outer);
+            text-align: center;
+            margin-top: 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 { font-family: 'Orbitron'; margin-bottom: 5px; color: var(--text-main); font-size: 2rem; }
+        .subtitle { color: var(--text-sub); margin-bottom: 30px; font-size: 0.9rem; letter-spacing: 1px; font-weight: 600; }
+
+        /* --- UPLOAD ZONE --- */
+        .upload-area {
+            background: var(--bg-color);
+            border-radius: 15px;
+            padding: 50px 20px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            box-shadow: var(--shadow-inner);
+            border: 2px dashed rgba(160, 174, 192, 0.2);
+            color: var(--text-sub);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:active, .upload-area.dragover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            background: rgba(0, 242, 195, 0.05);
+        }
+        
+        .upload-area p { font-weight: 700; font-family: 'Exo 2'; font-size: 1rem; }
+        .file-info { font-size: 0.8rem; opacity: 0.8; margin-top: 8px; font-family: 'Orbitron'; letter-spacing: 1px; }
+        #fileInput { display: none; }
+
+        /* --- ACTION BUTTONS --- */
+        .btn {
+            width: 100%; padding: 18px 0;
+            border: none; border-radius: 25px;
+            background: var(--bg-color);
+            box-shadow: var(--shadow-outer);
+            color: var(--accent-color);
+            font-family: 'Orbitron'; font-weight: 900; font-size: 1rem;
+            letter-spacing: 1px; cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            touch-action: manipulation; /* Improves touch response */
+        }
+
+        .btn:active:not(:disabled) { box-shadow: var(--shadow-inner); transform: scale(0.98); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; filter: grayscale(1); }
+
+        .copy-btn { margin-bottom: 15px; color: var(--text-main); font-size: 0.9rem; }
+        .copy-btn:active { color: var(--accent-color); }
+
+        /* --- PROGRESS SECTION --- */
+        .progress-section { margin-top: 25px; text-align: left; display: none; }
+        
+        .progress-bar-bg {
+            width: 100%; height: 12px;
+            background: var(--bg-color);
+            box-shadow: var(--shadow-inner);
+            border-radius: 6px; overflow: hidden; margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%; width: 0%;
+            background: var(--accent-color);
+            box-shadow: 0 0 15px var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text { display: flex; justify-content: space-between; font-size: 0.8rem; font-family: 'Orbitron'; color: var(--text-main); font-weight: 700; }
+        .speed-info { font-size: 0.7rem; color: var(--text-sub); text-align: center; margin-top: 8px; font-weight: 600; letter-spacing: 0.5px; }
+
+        /* --- MESSAGES & STATUS --- */
+        #successBox { margin-top: 25px; display: none; animation: fadeIn 0.5s ease; }
+        
+        .status-box {
+            padding: 20px; border-radius: 15px;
+            font-size: 0.9rem; margin-top: 15px;
+            background: var(--bg-color);
+            box-shadow: var(--shadow-inner);
+            text-align: left;
+        }
+        
+        .verify-info { color: var(--accent-color); margin-bottom: 5px; font-weight: 700; font-family: 'Orbitron'; font-size: 0.85rem; }
+        .error-msg { 
+            color: var(--error-color); margin-top: 20px; display: none; padding: 15px; text-align: center;
+            font-weight: 700; font-family: 'Orbitron'; font-size: 0.9rem;
+            background: rgba(255, 107, 107, 0.1); border-radius: 10px; border: 1px solid var(--error-color);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- MOBILE SPECIFIC ADJUSTMENTS --- */
+        @media (max-width: 600px) {
+            header { padding: 15px 0; width: 92%; }
+            
+            .main-card {
+                width: 92%; /* Slightly wider on mobile */
+                padding: 30px 20px; /* Reduced padding */
+                margin-top: 5px;
+            }
+
+            .logo { font-size: 1.3rem; }
+            h1 { font-size: 1.6rem; }
+            .subtitle { margin-bottom: 25px; font-size: 0.8rem; }
+
+            /* Compact Upload Area for small screens */
+            .upload-area { padding: 40px 15px; margin-bottom: 20px; }
+            .upload-area p { font-size: 0.95rem; }
+
+            /* Larger touch targets */
+            .btn { padding: 16px 0; font-size: 0.95rem; }
+            
+            /* Better progress bar visibility */
+            .progress-bar-bg { height: 14px; }
+            
+            .status-box { padding: 15px; }
+            .verify-info { font-size: 0.8rem; word-break: break-all; }
+        }
+
+        /* Very small screens (iPhone SE etc) */
+        @media (max-width: 360px) {
+            .main-card { padding: 25px 15px; }
+            h1 { font-size: 1.4rem; }
+            .upload-area { padding: 30px 10px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">CLOUDSHARE</div>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle Theme">
+            <svg class="icon-sun" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+        </button>
+    </header>
+
+    <div class="main-card">
+        <h1>☁️ TRANSFER</h1>
+        <p class="subtitle">SECURE P2P UP TO 10GB</p>
+
+        <div class="upload-area" id="dropZone">
+            <p id="fileNameDisplay">TAP OR DRAG FILE</p>
+            <p class="file-info" id="fileSizeDisplay"></p>
+        </div>
+        <input type="file" id="fileInput">
+
+        <div class="progress-section" id="progressSection">
+            <div class="progress-text">
+                <span id="statusText">PREPARING...</span>
+                <span id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="speed-info" id="speedInfo"></div>
+        </div>
+
+        <div class="error-msg" id="errorMsg"></div>
+
+        <div id="successBox">
+            <div class="status-box">
+                <div class="verify-info" id="verifyInfo"></div>
+                <div id="liveStatus" style="color: var(--text-sub); font-size: 0.8rem;">⏳ Waiting for recipient...</div>
+            </div>
+            <br>
+            <button class="btn copy-btn" id="copyBtn">📋 COPY DOWNLOAD LINK</button>
+        </div>
+
+        <button class="btn" id="uploadBtn">🚀 START UPLOAD</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // --- THEME TOGGLE LOGIC ---
+        const themeToggle = document.getElementById('themeToggle');
+        
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+
+        themeToggle.onclick = () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            setTheme(currentTheme === 'light' ? 'dark' : 'light');
+        };
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        setTheme(savedTheme);
+
+        // --- FILE TRANSFER LOGIC ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyAD3J4LbHsQmvSgdLW_xaSbxjym3T-4Mw8",
+            authDomain: "dim-transfer.firebaseapp.com",
+            databaseURL: "https://dim-transfer-default-rtdb.firebaseio.com",
+            projectId: "dim-transfer",
+            storageBucket: "dim-transfer.firebasestorage.app",
+            messagingSenderId: "429771611699",
+            appId: "1:429771611699:web:453923495bc3b0adca8d46"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const API_URL = "https://snowy-recipe-1d49.indielumo.workers.dev";
+
+        // DOM Elements
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const progressSection = document.getElementById('progressSection');
+        const progressFill = document.getElementById('progressFill');
+        const statusText = document.getElementById('statusText');
+        const progressPercent = document.getElementById('progressPercent');
+        const speedInfo = document.getElementById('speedInfo');
+        const successBox = document.getElementById('successBox');
+        const copyBtn = document.getElementById('copyBtn');
+        const liveStatus = document.getElementById('liveStatus');
+        const verifyInfo = document.getElementById('verifyInfo');
+        const errorMsg = document.getElementById('errorMsg');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        const fileSizeDisplay = document.getElementById('fileSizeDisplay');
+
+        // Track upload progress
+        let uploadStartTime;
+        let lastLoaded = 0;
+        let lastTime = Date.now();
+
+        // ===== HELPERS =====
+        function sanitizeFirebaseKey(key) {
+            return key.replace(/[\.\#\$\/\[\]]/g, '_'); // Simpler regex for safe keys
+        }
+
+        function formatSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function formatSpeed(bytesPerSecond) {
+            if (bytesPerSecond < 1024) return bytesPerSecond.toFixed(0) + ' B/s';
+            if (bytesPerSecond < 1024 * 1024) return (bytesPerSecond / 1024).toFixed(1) + ' KB/s';
+            return (bytesPerSecond / (1024 * 1024)).toFixed(2) + ' MB/s';
+        }
+
+        function showError(msg) {
+            errorMsg.textContent = '❌ ' + msg;
+            errorMsg.style.display = 'block';
+            uploadBtn.style.display = 'block';
+            uploadBtn.disabled = false;
+            progressSection.style.display = 'none';
+        }
+
+        function updateProgress(percent, status, loaded, total) {
+            progressFill.style.width = percent + '%';
+            progressPercent.textContent = Math.round(percent) + '%';
+            if (status) statusText.textContent = status.toUpperCase();
+            
+            // Calculate speed
+            const now = Date.now();
+            const timeDiff = (now - lastTime) / 1000;
+            if (timeDiff > 0.5 && loaded) {
+                const bytesDiff = loaded - lastLoaded;
+                const speed = bytesDiff / timeDiff;
+                const remaining = total - loaded;
+                const eta = speed > 0 ? remaining / speed : 0;
+                
+                let etaText = '';
+                if (eta > 60) {
+                    etaText = `~${Math.round(eta / 60)}m LEFT`;
+                } else if (eta > 0) {
+                    etaText = `~${Math.round(eta)}s LEFT`;
+                }
+                
+                speedInfo.textContent = `${formatSpeed(speed)} • ${formatSize(loaded)} / ${formatSize(total)} • ${etaText}`;
+                
+                lastLoaded = loaded;
+                lastTime = now;
+            }
+        }
+
+        // Drag and drop / Click
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('dragover'); });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleFileSelect(e.dataTransfer.files[0]);
+            }
+        });
+        dropZone.onclick = () => fileInput.click();
+        fileInput.onchange = (e) => { if (e.target.files[0]) handleFileSelect(e.target.files[0]); };
+
+        function handleFileSelect(file) {
+            fileNameDisplay.textContent = '📄 ' + file.name;
+            fileSizeDisplay.textContent = formatSize(file.size);
+            errorMsg.style.display = 'none';
+        }
+
+        // ========== SIMPLE UPLOAD (Direct PUT) ==========
+        async function simpleUpload(file, uploadUrl, fileKey, totalSize) {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('PUT', uploadUrl, true);
+                xhr.setRequestHeader('Content-Length', file.size);
+
+                xhr.upload.onprogress = (e) => {
+                    if (e.lengthComputable) {
+                        const percent = (e.loaded / e.total) * 100;
+                        updateProgress(percent, 'UPLOADING...', e.loaded, e.total);
+                    }
+                };
+
+                xhr.onload = () => {
+                    if (xhr.status === 200 || xhr.status === 201) {
+                        resolve({ success: true, fileKey });
+                    } else {
+                        reject(new Error(`Upload failed: ${xhr.status}`));
+                    }
+                };
+                xhr.onerror = () => reject(new Error('Network error'));
+                xhr.send(file);
+            });
+        }
+
+        // ========== MULTIPART LOGIC ==========
+        async function uploadChunk(chunk, signedUrl, partNumber, totalParts, maxRetries = 5) {
+            let lastError;
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    const response = await new Promise((resolve, reject) => {
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('PUT', signedUrl, true);
+                        xhr.timeout = 300000;
+                        xhr.onload = () => {
+                            if (xhr.status === 200 || xhr.status === 201) {
+                                let etag = xhr.getResponseHeader('ETag');
+                                if (etag) etag = etag.replace(/"/g, '');
+                                resolve({ success: true, etag: etag || `part-${partNumber}`, status: xhr.status });
+                            } else {
+                                reject(new Error(`Part ${partNumber} failed`));
+                            }
+                        };
+                        xhr.onerror = () => reject(new Error('Network error'));
+                        xhr.ontimeout = () => reject(new Error('Timeout'));
+                        xhr.send(chunk);
+                    });
+                    return response;
+                } catch (error) {
+                    lastError = error;
+                    if (attempt < maxRetries) {
+                        statusText.textContent = `RETRYING PART ${partNumber}...`;
+                        await new Promise(r => setTimeout(r, 2000 * attempt));
+                    }
+                }
+            }
+            throw lastError;
+        }
+
+        async function multipartUpload(file, fileKey, uploadId, totalParts, chunkSize) {
+            const parts = [];
+            let uploadedBytes = 0;
+
+            for (let partNumber = 1; partNumber <= totalParts; partNumber++) {
+                const start = (partNumber - 1) * chunkSize;
+                const end = Math.min(start + chunkSize, file.size);
+                const chunk = file.slice(start, end);
+                const chunkSizeActual = end - start;
+
+                statusText.textContent = `GETTING URL PART ${partNumber}/${totalParts}...`;
+
+                const urlRes = await fetch(
+                    `${API_URL}/get-part-url?fileKey=${encodeURIComponent(fileKey)}&uploadId=${encodeURIComponent(uploadId)}&partNumber=${partNumber}`
+                );
+
+                if (!urlRes.ok) throw new Error('Failed to get part URL');
+                const { partUrl } = await urlRes.json();
+
+                updateProgress((uploadedBytes / file.size) * 100, `UPLOADING PART ${partNumber}/${totalParts}...`, uploadedBytes, file.size);
+                const result = await uploadChunk(chunk, partUrl, partNumber, totalParts);
+                parts.push({ partNumber: partNumber, etag: result.etag });
+
+                uploadedBytes += chunkSizeActual;
+                updateProgress((uploadedBytes / file.size) * 100, `COMPLETED PART ${partNumber}`, uploadedBytes, file.size);
+            }
+
+            statusText.textContent = 'FINALIZING...';
+            const completeRes = await fetch(`${API_URL}/complete-upload`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fileKey, uploadId, parts })
+            });
+
+            if (!completeRes.ok) throw new Error('Failed to complete upload');
+            const completeData = await completeRes.json();
+            return { success: true, fileKey, size: completeData.size };
+        }
+
+        async function verifyUpload(fileKey, expectedSize) {
+            try {
+                const res = await fetch(`${API_URL}/info/${encodeURIComponent(fileKey)}`);
+                if (!res.ok) return { verified: false, error: 'File not found' };
+                const data = await res.json();
+                if (data.size === expectedSize) return { verified: true, size: data.size };
+                return { verified: false, error: 'Size mismatch' };
+            } catch (e) {
+                return { verified: false, error: e.message };
+            }
+        }
+
+        // ========== MAIN HANDLER ==========
+        uploadBtn.onclick = async () => {
+            const file = fileInput.files[0];
+            if (!file) return showError('PLEASE SELECT A FILE');
+            if (file.size > 10 * 1024 * 1024 * 1024) return showError('FILE SIZE EXCEEDS 10GB');
+
+            errorMsg.style.display = 'none';
+            uploadBtn.style.display = 'none';
+            successBox.style.display = 'none';
+            progressSection.style.display = 'block';
+            speedInfo.textContent = '';
+            
+            uploadStartTime = Date.now();
+            lastLoaded = 0;
+            lastTime = Date.now();
+            let fileKey = null;
+            let uploadId = null;
+
+            try {
+                updateProgress(0, 'INITIATING...');
+                const initRes = await fetch(
+                    `${API_URL}/initiate-upload?filename=${encodeURIComponent(file.name)}&size=${file.size}`
+                );
+                if (!initRes.ok) throw new Error('Failed to initiate');
+                const initData = await initRes.json();
+                fileKey = initData.fileKey;
+
+                let uploadResult;
+                if (initData.mode === 'simple') {
+                    uploadResult = await simpleUpload(file, initData.uploadUrl, fileKey, file.size);
+                } else {
+                    uploadId = initData.uploadId;
+                    uploadResult = await multipartUpload(file, fileKey, uploadId, initData.totalParts, initData.chunkSize);
+                }
+
+                updateProgress(100, 'VERIFYING...');
+                const verification = await verifyUpload(fileKey, file.size);
+                if (!verification.verified) throw new Error(`Verification failed: ${verification.error}`);
+
+                const totalTime = ((Date.now() - uploadStartTime) / 1000).toFixed(1);
+                updateProgress(100, `DONE IN ${totalTime}s`);
+                
+                progressSection.style.display = 'none';
+                successBox.style.display = 'block';
+
+                const downloadUrl = `${API_URL}/download/${encodeURIComponent(fileKey)}`;
+                verifyInfo.innerHTML = `✅ VERIFIED: ${formatSize(verification.size)}`;
+
+                copyBtn.onclick = () => {
+                    navigator.clipboard.writeText(downloadUrl).then(() => {
+                        copyBtn.textContent = '✅ LINK COPIED!';
+                        setTimeout(() => { copyBtn.textContent = '📋 COPY DOWNLOAD LINK'; }, 2000);
+                    });
+                };
+
+                const firebaseSafeKey = sanitizeFirebaseKey(fileKey);
+                const statusRef = ref(db, 'transfers/' + firebaseSafeKey);
+                onValue(statusRef, (snapshot) => {
+                    const data = snapshot.val();
+                    if (data && data.status === 'downloaded') {
+                        liveStatus.textContent = '✅ FILE DOWNLOADED!';
+                        liveStatus.style.color = 'var(--accent-color)';
+                        copyBtn.disabled = true;
+                    }
+                });
+
+            } catch (error) {
+                console.error(error);
+                if (uploadId && fileKey) {
+                     fetch(`${API_URL}/abort-upload`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ fileKey, uploadId })
+                    }).catch(console.error);
+                }
+                showError(error.message || 'UPLOAD FAILED');
+            }
+        };
+    </script>
+</body>
+</html>
