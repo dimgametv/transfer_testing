@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline';">
-    <title>CloudShare | Private Transfer</title>
+    <title>SENDRA | By XRV LABS</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
     
@@ -16,6 +16,7 @@
             --text-sub: #899bb5;
             --accent-color: #4ecca3;
             --error-color: #ff6b6b;
+            --warning-color: #f1c40f;
             --placeholder-bg: #cbd5e0; 
             --shadow-outer: 5px 5px 10px rgba(163,177,198,0.3), -5px -5px 10px rgba(255,255,255, 0.6);
             --shadow-inner: inset 4px 4px 8px rgb(163,177,198, 0.7), inset -4px -4px 8px rgba(255,255,255, 0.8);
@@ -40,7 +41,6 @@
             font-family: 'Exo 2', sans-serif; 
             color: var(--text-main); 
             min-height: 100vh; 
-            /* Fix for mobile address bar jumpiness */
             min-height: -webkit-fill-available;
             overflow-x: hidden;
             display: flex;
@@ -59,9 +59,25 @@
             padding: 20px 0; margin-bottom: 10px;
         }
 
+        .logo-container { display: flex; flex-direction: column; }
         .logo { 
             font-weight: 900; color: var(--text-main); text-transform: uppercase; 
             font-family: 'Orbitron'; font-size: 1.5rem; letter-spacing: 1px;
+        }
+        .logo-sub { font-size: 0.7rem; color: var(--text-sub); font-weight: 600; letter-spacing: 2px; margin-top: 2px; }
+
+        .header-right { display: flex; align-items: center; gap: 12px; }
+
+        .live-indicator {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 0.7rem; font-family: 'Orbitron';
+            color: var(--accent-color); font-weight: 700;
+        }
+        .live-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-color);
+            animation: livePulse 1.5s infinite;
         }
 
         .icon-btn { 
@@ -74,6 +90,66 @@
         .icon-btn:active { box-shadow: var(--shadow-inner); transform: scale(0.95); }
         [data-theme="dark"] .icon-sun, [data-theme="light"] .icon-moon { display: none; }
 
+        /* --- INFO BANNER (QUEUE SYSTEM) --- */
+        .info-card {
+            width: 90%; max-width: 500px;
+            background: var(--bg-color);
+            border-radius: 15px;
+            padding: 15px 20px;
+            box-shadow: var(--shadow-inner);
+            margin-bottom: 20px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        .queue-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            font-family: 'Orbitron'; font-size: 0.8rem; color: var(--text-sub); 
+        }
+        
+        .queue-status { 
+            font-weight: 700; color: var(--accent-color); 
+            display: flex; align-items: center; gap: 6px; 
+            transition: color 0.3s ease;
+        }
+        .queue-status.busy { color: var(--warning-color); }
+        .queue-status.full { color: var(--error-color); }
+        
+        .status-dot { 
+            width: 8px; height: 8px; border-radius: 50%; 
+            background: currentColor; box-shadow: 0 0 8px currentColor; 
+            animation: pulse 2s infinite; 
+        }
+
+        .storage-bar-bg { 
+            width: 100%; height: 10px; 
+            background: rgba(0,0,0,0.15); border-radius: 5px; 
+            overflow: hidden; position: relative; 
+        }
+        .storage-bar-fill { 
+            height: 100%; background: var(--accent-color); 
+            width: 0%; transition: width 0.8s ease, background-color 0.3s ease; 
+            border-radius: 5px;
+        }
+        .storage-bar-fill.warning { background: var(--warning-color); }
+        .storage-bar-fill.critical { background: var(--error-color); }
+
+        .storage-text { 
+            font-size: 0.75rem; display: flex; justify-content: space-between; 
+            margin-top: 4px; font-weight: 600; color: var(--text-sub); 
+        }
+
+        .active-ops {
+            font-size: 0.7rem; color: var(--text-sub); 
+            display: flex; align-items: center; gap: 6px;
+            padding-top: 5px; border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .active-ops-count {
+            background: var(--accent-color); color: var(--bg-color);
+            padding: 2px 8px; border-radius: 10px; font-weight: 700;
+            font-family: 'Orbitron';
+        }
+        .active-ops-count.busy { background: var(--warning-color); }
+
         /* --- MAIN CARD --- */
         .main-card {
             width: 90%; max-width: 500px;
@@ -82,19 +158,28 @@
             padding: 40px;
             box-shadow: var(--shadow-outer);
             text-align: center;
-            margin-top: 10px;
+            margin-top: 5px;
             position: relative;
             z-index: 2;
         }
 
         h1 { font-family: 'Orbitron'; margin-bottom: 5px; color: var(--text-main); font-size: 2rem; }
-        .subtitle { color: var(--text-sub); margin-bottom: 30px; font-size: 0.9rem; letter-spacing: 1px; font-weight: 600; }
+        .subtitle { color: var(--text-sub); margin-bottom: 25px; font-size: 0.9rem; letter-spacing: 1px; font-weight: 600; }
+        
+        .feature-pills { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .pill { 
+            background: var(--bg-color); box-shadow: var(--shadow-outer); 
+            padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; 
+            font-weight: 700; color: var(--text-sub); 
+            display: flex; align-items: center; gap: 5px; 
+        }
+        .pill i { font-style: normal; }
 
         /* --- UPLOAD ZONE --- */
         .upload-area {
             background: var(--bg-color);
             border-radius: 15px;
-            padding: 50px 20px;
+            padding: 40px 20px;
             margin-bottom: 25px;
             cursor: pointer;
             box-shadow: var(--shadow-inner);
@@ -110,9 +195,16 @@
             color: var(--accent-color);
             background: rgba(0, 242, 195, 0.05);
         }
+
+        .upload-area.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
         
         .upload-area p { font-weight: 700; font-family: 'Exo 2'; font-size: 1rem; }
         .file-info { font-size: 0.8rem; opacity: 0.8; margin-top: 8px; font-family: 'Orbitron'; letter-spacing: 1px; }
+        .file-warning { color: var(--error-color); font-size: 0.75rem; margin-top: 5px; display: none; }
         #fileInput { display: none; }
 
         /* --- ACTION BUTTONS --- */
@@ -126,11 +218,13 @@
             letter-spacing: 1px; cursor: pointer;
             transition: all 0.2s ease;
             text-transform: uppercase;
-            touch-action: manipulation; /* Improves touch response */
+            touch-action: manipulation;
         }
 
         .btn:active:not(:disabled) { box-shadow: var(--shadow-inner); transform: scale(0.98); }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; filter: grayscale(1); }
+        .btn.warning { color: var(--warning-color); }
+        .btn.error { color: var(--error-color); }
 
         .copy-btn { margin-bottom: 15px; color: var(--text-main); font-size: 0.9rem; }
         .copy-btn:active { color: var(--accent-color); }
@@ -173,62 +267,100 @@
             background: rgba(255, 107, 107, 0.1); border-radius: 10px; border: 1px solid var(--error-color);
         }
 
+        /* --- FOOTER --- */
+        footer { 
+            margin-top: 30px; color: var(--text-sub); font-size: 0.75rem; 
+            text-align: center; opacity: 0.6; font-family: 'Exo 2'; 
+        }
+
+        /* --- CONNECTION STATUS --- */
+        .connection-lost {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: var(--error-color); color: white;
+            padding: 10px; text-align: center;
+            font-family: 'Orbitron'; font-size: 0.8rem; font-weight: 700;
+            z-index: 1000; display: none;
+        }
+        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { opacity: 0.5; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0.5; transform: scale(0.9); } }
+        @keyframes livePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
         /* --- MOBILE SPECIFIC ADJUSTMENTS --- */
         @media (max-width: 600px) {
             header { padding: 15px 0; width: 92%; }
-            
+            .info-card { width: 92%; padding: 12px 15px; }
             .main-card {
-                width: 92%; /* Slightly wider on mobile */
-                padding: 30px 20px; /* Reduced padding */
+                width: 92%; 
+                padding: 30px 20px; 
                 margin-top: 5px;
             }
-
             .logo { font-size: 1.3rem; }
             h1 { font-size: 1.6rem; }
-            .subtitle { margin-bottom: 25px; font-size: 0.8rem; }
-
-            /* Compact Upload Area for small screens */
-            .upload-area { padding: 40px 15px; margin-bottom: 20px; }
-            .upload-area p { font-size: 0.95rem; }
-
-            /* Larger touch targets */
+            .upload-area { padding: 30px 15px; margin-bottom: 20px; }
             .btn { padding: 16px 0; font-size: 0.95rem; }
-            
-            /* Better progress bar visibility */
-            .progress-bar-bg { height: 14px; }
-            
-            .status-box { padding: 15px; }
-            .verify-info { font-size: 0.8rem; word-break: break-all; }
+            .live-indicator { font-size: 0.6rem; }
         }
-
-        /* Very small screens (iPhone SE etc) */
-        @media (max-width: 360px) {
-            .main-card { padding: 25px 15px; }
-            h1 { font-size: 1.4rem; }
-            .upload-area { padding: 30px 10px; }
-        }
-
     </style>
 </head>
 <body>
 
+    <div class="connection-lost" id="connectionLost">
+        ⚠️ CONNECTION LOST - RECONNECTING...
+    </div>
+
     <header>
-        <div class="logo">CLOUDSHARE</div>
-        <button class="icon-btn" id="themeToggle" aria-label="Toggle Theme">
-            <svg class="icon-sun" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z"/></svg>
-            <svg class="icon-moon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
-        </button>
+        <div class="logo-container">
+            <div class="logo">SENDRA</div>
+            <div class="logo-sub">BY XRV LABS</div>
+        </div>
+        <div class="header-right">
+            <div class="live-indicator">
+                <span class="live-dot"></span>
+                <span>LIVE</span>
+            </div>
+            <button class="icon-btn" id="themeToggle" aria-label="Toggle Theme">
+                <svg class="icon-sun" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z"/></svg>
+                <svg class="icon-moon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+            </button>
+        </div>
     </header>
 
+    <div class="info-card">
+        <div class="queue-header">
+            <span>SYSTEM STATUS</span>
+            <span class="queue-status" id="systemStatus">
+                <span class="status-dot"></span> 
+                <span id="statusLabel">CONNECTING...</span>
+            </span>
+        </div>
+        <div class="storage-bar-bg">
+            <div class="storage-bar-fill" id="storageBar"></div>
+        </div>
+        <div class="storage-text">
+            <span id="storageUsed">-- USED</span>
+            <span id="storageFree">-- FREE</span>
+        </div>
+        <div class="active-ops" id="activeOpsSection">
+            <span>ACTIVE TRANSFERS:</span>
+            <span class="active-ops-count" id="activeOpsCount">0</span>
+        </div>
+    </div>
+
     <div class="main-card">
-        <h1>☁️ TRANSFER</h1>
-        <p class="subtitle">SECURE P2P UP TO 10GB</p>
+        <h1>SENDRA</h1>
+        <p class="subtitle">SECURE REALTIME TRANSFER</p>
+
+        <div class="feature-pills">
+            <div class="pill">🔒 END-TO-END</div>
+            <div class="pill">⚡ 10GB LIMIT</div>
+            <div class="pill">🗑️ AUTO-DELETE</div>
+        </div>
 
         <div class="upload-area" id="dropZone">
             <p id="fileNameDisplay">TAP OR DRAG FILE</p>
-            <p class="file-info" id="fileSizeDisplay"></p>
+            <p class="file-info" id="fileSizeDisplay">MAX 10GB • REALTIME QUEUE</p>
+            <p class="file-warning" id="fileWarning"></p>
         </div>
         <input type="file" id="fileInput">
 
@@ -254,31 +386,32 @@
             <button class="btn copy-btn" id="copyBtn">📋 COPY DOWNLOAD LINK</button>
         </div>
 
-        <button class="btn" id="uploadBtn">🚀 START UPLOAD</button>
+        <button class="btn" id="uploadBtn" disabled>🚀 START TRANSFER</button>
     </div>
+
+    <footer>
+        © 2025 XRV LABS • SENDRA NETWORK<br>
+        Files are automatically deleted after download.
+    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, onValue, off } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         // --- THEME TOGGLE LOGIC ---
         const themeToggle = document.getElementById('themeToggle');
-        
         function setTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
         }
-
         themeToggle.onclick = () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');
             setTheme(currentTheme === 'light' ? 'dark' : 'light');
         };
-
-        // Initialize theme
         const savedTheme = localStorage.getItem('theme') || 'dark';
         setTheme(savedTheme);
 
-        // --- FILE TRANSFER LOGIC ---
+        // --- FIREBASE & API CONFIG ---
         const firebaseConfig = {
             apiKey: "AIzaSyAD3J4LbHsQmvSgdLW_xaSbxjym3T-4Mw8",
             authDomain: "dim-transfer.firebaseapp.com",
@@ -292,8 +425,12 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const API_URL = "https://snowy-recipe-1d49.indielumo.workers.dev";
+        const TOTAL_STORAGE_LIMIT = 10 * 1024 * 1024 * 1024; // 10GB
 
-        // DOM Elements
+        // --- SESSION ID ---
+        const SESSION_ID = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+        // --- DOM ELEMENTS ---
         const fileInput = document.getElementById('fileInput');
         const dropZone = document.getElementById('dropZone');
         const uploadBtn = document.getElementById('uploadBtn');
@@ -309,21 +446,40 @@
         const errorMsg = document.getElementById('errorMsg');
         const fileNameDisplay = document.getElementById('fileNameDisplay');
         const fileSizeDisplay = document.getElementById('fileSizeDisplay');
+        const fileWarning = document.getElementById('fileWarning');
+        
+        // Queue UI Elements
+        const systemStatus = document.getElementById('systemStatus');
+        const statusLabel = document.getElementById('statusLabel');
+        const storageBar = document.getElementById('storageBar');
+        const storageUsed = document.getElementById('storageUsed');
+        const storageFree = document.getElementById('storageFree');
+        const activeOpsCount = document.getElementById('activeOpsCount');
+        const connectionLost = document.getElementById('connectionLost');
 
-        // Track upload progress
+        // --- STATE ---
+        let currentSystemState = {
+            usedBytes: 0,
+            freeBytes: TOTAL_STORAGE_LIMIT,
+            activeOperations: 0
+        };
+        let selectedFile = null;
         let uploadStartTime;
         let lastLoaded = 0;
         let lastTime = Date.now();
+        let isUploading = false;
+        let heartbeatInterval = null;
+        let statusPollingInterval = null;
 
         // ===== HELPERS =====
         function sanitizeFirebaseKey(key) {
-            return key.replace(/[\.\#\$\/\[\]]/g, '_'); // Simpler regex for safe keys
+            return key.replace(/[\.\#\$\/\[\]]/g, '_');
         }
 
         function formatSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
+            if (bytes === 0) return '0 B';
             const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const sizes = ['B', 'KB', 'MB', 'GB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
@@ -338,8 +494,9 @@
             errorMsg.textContent = '❌ ' + msg;
             errorMsg.style.display = 'block';
             uploadBtn.style.display = 'block';
-            uploadBtn.disabled = false;
             progressSection.style.display = 'none';
+            isUploading = false;
+            updateButtonState();
         }
 
         function updateProgress(percent, status, loaded, total) {
@@ -347,7 +504,6 @@
             progressPercent.textContent = Math.round(percent) + '%';
             if (status) statusText.textContent = status.toUpperCase();
             
-            // Calculate speed
             const now = Date.now();
             const timeDiff = (now - lastTime) / 1000;
             if (timeDiff > 0.5 && loaded) {
@@ -370,32 +526,200 @@
             }
         }
 
-        // Drag and drop / Click
-        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+        // ===== REAL-TIME SYSTEM STATUS =====
+        async function fetchSystemStatus() {
+            try {
+                const res = await fetch(`${API_URL}/system-status`);
+                if (!res.ok) throw new Error('Failed to fetch status');
+                
+                const data = await res.json();
+                currentSystemState = {
+                    usedBytes: data.usedBytes,
+                    freeBytes: data.freeBytes,
+                    activeOperations: data.activeOperations
+                };
+                
+                updateSystemUI();
+                connectionLost.style.display = 'none';
+                return data;
+            } catch (error) {
+                console.error('Status fetch error:', error);
+                connectionLost.style.display = 'block';
+                return null;
+            }
+        }
+
+        function updateSystemUI() {
+            const { usedBytes, freeBytes, activeOperations } = currentSystemState;
+            const percentage = (usedBytes / TOTAL_STORAGE_LIMIT) * 100;
+            
+            // Update storage bar
+            storageBar.style.width = `${percentage}%`;
+            storageBar.classList.remove('warning', 'critical');
+            if (percentage > 90) {
+                storageBar.classList.add('critical');
+            } else if (percentage > 70) {
+                storageBar.classList.add('warning');
+            }
+            
+            // Update text
+            storageUsed.textContent = `${formatSize(usedBytes)} USED`;
+            storageFree.textContent = `${formatSize(freeBytes)} FREE`;
+            
+            // Update active operations
+            activeOpsCount.textContent = activeOperations;
+            activeOpsCount.classList.toggle('busy', activeOperations > 0);
+            
+            // Update system status
+            systemStatus.classList.remove('busy', 'full');
+            
+            if (percentage >= 100) {
+                statusLabel.textContent = 'STORAGE FULL';
+                systemStatus.classList.add('full');
+            } else if (activeOperations > 0) {
+                statusLabel.textContent = 'ONLINE & BUSY';
+                systemStatus.classList.add('busy');
+            } else {
+                statusLabel.textContent = 'ONLINE & READY';
+            }
+            
+            updateButtonState();
+        }
+
+        function updateButtonState() {
+            if (isUploading) {
+                uploadBtn.disabled = true;
+                uploadBtn.textContent = '⏳ UPLOADING...';
+                return;
+            }
+            
+            if (!selectedFile) {
+                uploadBtn.disabled = true;
+                uploadBtn.textContent = '📁 SELECT A FILE FIRST';
+                uploadBtn.classList.remove('warning', 'error');
+                return;
+            }
+            
+            const { freeBytes, activeOperations } = currentSystemState;
+            
+            if (selectedFile.size > freeBytes) {
+                uploadBtn.disabled = true;
+                uploadBtn.textContent = '❌ NOT ENOUGH SPACE';
+                uploadBtn.classList.add('error');
+                uploadBtn.classList.remove('warning');
+                fileWarning.textContent = `Need ${formatSize(selectedFile.size - freeBytes)} more space`;
+                fileWarning.style.display = 'block';
+            } else if (activeOperations > 0) {
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = '🚀 JOIN QUEUE & TRANSFER';
+                uploadBtn.classList.add('warning');
+                uploadBtn.classList.remove('error');
+                fileWarning.style.display = 'none';
+            } else {
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = '🚀 START TRANSFER';
+                uploadBtn.classList.remove('warning', 'error');
+                fileWarning.style.display = 'none';
+            }
+        }
+
+        // ===== FIREBASE REAL-TIME LISTENER =====
+        function setupRealtimeListeners() {
+            // Listen to system status changes
+            const systemRef = ref(db, 'system/status');
+            onValue(systemRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    currentSystemState = {
+                        usedBytes: data.usedBytes || 0,
+                        freeBytes: data.freeBytes || TOTAL_STORAGE_LIMIT,
+                        activeOperations: data.activeOperations || 0
+                    };
+                    updateSystemUI();
+                }
+            });
+
+            // Listen to active operations
+            const opsRef = ref(db, 'system/activeOperations');
+            onValue(opsRef, (snapshot) => {
+                const data = snapshot.val();
+                const count = data ? Object.keys(data).filter(k => data[k] && data[k].active).length : 0;
+                currentSystemState.activeOperations = count;
+                updateSystemUI();
+            });
+        }
+
+        // ===== HEARTBEAT (Keep session alive during upload) =====
+        async function sendHeartbeat(operationType = null, fileSize = 0, fileName = '') {
+            try {
+                await fetch(`${API_URL}/heartbeat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sessionId: SESSION_ID,
+                        operationType,
+                        fileSize,
+                        fileName
+                    })
+                });
+            } catch (e) {
+                console.error('Heartbeat error:', e);
+            }
+        }
+
+        async function endSession() {
+            try {
+                await fetch(`${API_URL}/end-session`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sessionId: SESSION_ID })
+                });
+            } catch (e) {
+                console.error('End session error:', e);
+            }
+        }
+
+        // ===== FILE SELECTION =====
+        dropZone.addEventListener('dragover', (e) => { 
+            e.preventDefault(); 
+            if (!isUploading) dropZone.classList.add('dragover'); 
+        });
         dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('dragover'); });
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropZone.classList.remove('dragover');
-            if (e.dataTransfer.files.length) {
+            if (!isUploading && e.dataTransfer.files.length) {
                 fileInput.files = e.dataTransfer.files;
                 handleFileSelect(e.dataTransfer.files[0]);
             }
         });
-        dropZone.onclick = () => fileInput.click();
+        dropZone.onclick = () => { if (!isUploading) fileInput.click(); };
         fileInput.onchange = (e) => { if (e.target.files[0]) handleFileSelect(e.target.files[0]); };
 
         function handleFileSelect(file) {
+            selectedFile = file;
             fileNameDisplay.textContent = '📄 ' + file.name;
             fileSizeDisplay.textContent = formatSize(file.size);
             errorMsg.style.display = 'none';
+            fileWarning.style.display = 'none';
+            
+            if (file.size > TOTAL_STORAGE_LIMIT) {
+                fileWarning.textContent = 'File exceeds 10GB limit!';
+                fileWarning.style.display = 'block';
+                uploadBtn.disabled = true;
+                uploadBtn.textContent = '❌ FILE TOO LARGE';
+                uploadBtn.classList.add('error');
+                return;
+            }
+            
+            updateButtonState();
         }
 
-        // ========== SIMPLE UPLOAD (Direct PUT) ==========
+        // ===== UPLOAD FUNCTIONS =====
         async function simpleUpload(file, uploadUrl, fileKey, totalSize) {
             return new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
                 xhr.open('PUT', uploadUrl, true);
-                xhr.setRequestHeader('Content-Length', file.size);
 
                 xhr.upload.onprogress = (e) => {
                     if (e.lengthComputable) {
@@ -416,8 +740,7 @@
             });
         }
 
-        // ========== MULTIPART LOGIC ==========
-        async function uploadChunk(chunk, signedUrl, partNumber, totalParts, maxRetries = 5) {
+        async function uploadChunk(chunk, signedUrl, partNumber, maxRetries = 5) {
             let lastError;
             for (let attempt = 1; attempt <= maxRetries; attempt++) {
                 try {
@@ -429,7 +752,7 @@
                             if (xhr.status === 200 || xhr.status === 201) {
                                 let etag = xhr.getResponseHeader('ETag');
                                 if (etag) etag = etag.replace(/"/g, '');
-                                resolve({ success: true, etag: etag || `part-${partNumber}`, status: xhr.status });
+                                resolve({ success: true, etag: etag || `part-${partNumber}` });
                             } else {
                                 reject(new Error(`Part ${partNumber} failed`));
                             }
@@ -460,7 +783,7 @@
                 const chunk = file.slice(start, end);
                 const chunkSizeActual = end - start;
 
-                statusText.textContent = `GETTING URL PART ${partNumber}/${totalParts}...`;
+                statusText.textContent = `GETTING URL ${partNumber}/${totalParts}...`;
 
                 const urlRes = await fetch(
                     `${API_URL}/get-part-url?fileKey=${encodeURIComponent(fileKey)}&uploadId=${encodeURIComponent(uploadId)}&partNumber=${partNumber}`
@@ -469,19 +792,23 @@
                 if (!urlRes.ok) throw new Error('Failed to get part URL');
                 const { partUrl } = await urlRes.json();
 
-                updateProgress((uploadedBytes / file.size) * 100, `UPLOADING PART ${partNumber}/${totalParts}...`, uploadedBytes, file.size);
-                const result = await uploadChunk(chunk, partUrl, partNumber, totalParts);
+                updateProgress((uploadedBytes / file.size) * 100, `UPLOADING ${partNumber}/${totalParts}...`, uploadedBytes, file.size);
+                
+                // Send heartbeat during long uploads
+                sendHeartbeat('upload', file.size, file.name);
+                
+                const result = await uploadChunk(chunk, partUrl, partNumber);
                 parts.push({ partNumber: partNumber, etag: result.etag });
 
                 uploadedBytes += chunkSizeActual;
-                updateProgress((uploadedBytes / file.size) * 100, `COMPLETED PART ${partNumber}`, uploadedBytes, file.size);
+                updateProgress((uploadedBytes / file.size) * 100, `DONE ${partNumber}/${totalParts}`, uploadedBytes, file.size);
             }
 
             statusText.textContent = 'FINALIZING...';
             const completeRes = await fetch(`${API_URL}/complete-upload`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ fileKey, uploadId, parts })
+                body: JSON.stringify({ fileKey, uploadId, parts, sessionId: SESSION_ID })
             });
 
             if (!completeRes.ok) throw new Error('Failed to complete upload');
@@ -501,17 +828,32 @@
             }
         }
 
-        // ========== MAIN HANDLER ==========
+        // ===== MAIN UPLOAD HANDLER =====
         uploadBtn.onclick = async () => {
-            const file = fileInput.files[0];
-            if (!file) return showError('PLEASE SELECT A FILE');
-            if (file.size > 10 * 1024 * 1024 * 1024) return showError('FILE SIZE EXCEEDS 10GB');
+            if (!selectedFile || isUploading) return;
+            
+            // Re-check if upload is allowed
+            try {
+                const checkRes = await fetch(`${API_URL}/can-upload?size=${selectedFile.size}`);
+                const checkData = await checkRes.json();
+                
+                if (!checkData.allowed) {
+                    showError(`NOT ENOUGH SPACE: Need ${formatSize(selectedFile.size)}, only ${formatSize(checkData.freeBytes)} available`);
+                    await fetchSystemStatus();
+                    return;
+                }
+            } catch (e) {
+                showError('Failed to check space availability');
+                return;
+            }
 
+            isUploading = true;
             errorMsg.style.display = 'none';
             uploadBtn.style.display = 'none';
             successBox.style.display = 'none';
             progressSection.style.display = 'block';
             speedInfo.textContent = '';
+            dropZone.classList.add('disabled');
             
             uploadStartTime = Date.now();
             lastLoaded = 0;
@@ -519,35 +861,58 @@
             let fileKey = null;
             let uploadId = null;
 
+            // Start heartbeat
+            heartbeatInterval = setInterval(() => {
+                sendHeartbeat('upload', selectedFile.size, selectedFile.name);
+            }, 10000);
+
             try {
                 updateProgress(0, 'INITIATING...');
+                
                 const initRes = await fetch(
-                    `${API_URL}/initiate-upload?filename=${encodeURIComponent(file.name)}&size=${file.size}`
+                    `${API_URL}/initiate-upload?filename=${encodeURIComponent(selectedFile.name)}&size=${selectedFile.size}&sessionId=${SESSION_ID}`
                 );
-                if (!initRes.ok) throw new Error('Failed to initiate');
+                
+                if (!initRes.ok) {
+                    const errorData = await initRes.json();
+                    throw new Error(errorData.error || 'Failed to initiate');
+                }
+                
                 const initData = await initRes.json();
                 fileKey = initData.fileKey;
 
                 let uploadResult;
                 if (initData.mode === 'simple') {
-                    uploadResult = await simpleUpload(file, initData.uploadUrl, fileKey, file.size);
+                    uploadResult = await simpleUpload(selectedFile, initData.uploadUrl, fileKey, selectedFile.size);
                 } else {
                     uploadId = initData.uploadId;
-                    uploadResult = await multipartUpload(file, fileKey, uploadId, initData.totalParts, initData.chunkSize);
+                    uploadResult = await multipartUpload(selectedFile, fileKey, uploadId, initData.totalParts, initData.chunkSize);
                 }
 
                 updateProgress(100, 'VERIFYING...');
-                const verification = await verifyUpload(fileKey, file.size);
+                const verification = await verifyUpload(fileKey, selectedFile.size);
                 if (!verification.verified) throw new Error(`Verification failed: ${verification.error}`);
 
                 const totalTime = ((Date.now() - uploadStartTime) / 1000).toFixed(1);
                 updateProgress(100, `DONE IN ${totalTime}s`);
+                
+                // Stop heartbeat
+                if (heartbeatInterval) {
+                    clearInterval(heartbeatInterval);
+                    heartbeatInterval = null;
+                }
+                
+                // End session
+                await endSession();
                 
                 progressSection.style.display = 'none';
                 successBox.style.display = 'block';
 
                 const downloadUrl = `${API_URL}/download/${encodeURIComponent(fileKey)}`;
                 verifyInfo.innerHTML = `✅ VERIFIED: ${formatSize(verification.size)}`;
+                
+                // Refresh system status
+                await fetchSystemStatus();
 
                 copyBtn.onclick = () => {
                     navigator.clipboard.writeText(downloadUrl).then(() => {
@@ -556,29 +921,73 @@
                     });
                 };
 
+                // Listen for download
                 const firebaseSafeKey = sanitizeFirebaseKey(fileKey);
                 const statusRef = ref(db, 'transfers/' + firebaseSafeKey);
                 onValue(statusRef, (snapshot) => {
                     const data = snapshot.val();
                     if (data && data.status === 'downloaded') {
-                        liveStatus.textContent = '✅ FILE DOWNLOADED!';
+                        liveStatus.textContent = '✅ FILE DOWNLOADED & DELETED!';
                         liveStatus.style.color = 'var(--accent-color)';
                         copyBtn.disabled = true;
+                        copyBtn.textContent = '🗑️ FILE DELETED';
+                        
+                        // Refresh system status
+                        fetchSystemStatus();
                     }
                 });
 
             } catch (error) {
                 console.error(error);
+                
+                // Stop heartbeat
+                if (heartbeatInterval) {
+                    clearInterval(heartbeatInterval);
+                    heartbeatInterval = null;
+                }
+                
+                // Abort upload if needed
                 if (uploadId && fileKey) {
-                     fetch(`${API_URL}/abort-upload`, {
+                    fetch(`${API_URL}/abort-upload`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ fileKey, uploadId })
+                        body: JSON.stringify({ fileKey, uploadId, sessionId: SESSION_ID })
                     }).catch(console.error);
                 }
+                
+                // End session
+                await endSession();
+                
                 showError(error.message || 'UPLOAD FAILED');
+                dropZone.classList.remove('disabled');
             }
+            
+            isUploading = false;
         };
+
+        // ===== CLEANUP ON PAGE UNLOAD =====
+        window.addEventListener('beforeunload', () => {
+            if (heartbeatInterval) {
+                clearInterval(heartbeatInterval);
+            }
+            // Try to end session (may not complete)
+            navigator.sendBeacon(`${API_URL}/end-session`, JSON.stringify({ sessionId: SESSION_ID }));
+        });
+
+        // ===== INITIALIZATION =====
+        async function init() {
+            // Initial status fetch
+            await fetchSystemStatus();
+            
+            // Setup real-time listeners
+            setupRealtimeListeners();
+            
+            // Poll for status updates every 5 seconds as backup
+            statusPollingInterval = setInterval(fetchSystemStatus, 5000);
+        }
+
+        // Start the app
+        init();
     </script>
 </body>
 </html>
