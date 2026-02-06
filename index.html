@@ -1,175 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CloudShare | Private Transfer</title>
-    <style>
-        :root { 
-            --glass: rgba(255, 255, 255, 0.1); 
-            --border: rgba(255, 255, 255, 0.2); 
-            --accent: #4ecca3; 
-            --danger: #ff4e4e;
-        }
-        body {
-            margin: 0; height: 100vh; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
-            font-family: 'Segoe UI', system-ui, sans-serif; color: white;
-        }
-        .glass-card {
-            background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border); border-radius: 28px;
-            padding: 40px; width: 400px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-        h1 { font-weight: 600; margin-bottom: 5px; letter-spacing: -1px; }
-        .subtitle { font-size: 0.85rem; opacity: 0.6; margin-bottom: 30px; }
-        
-        .upload-area {
-            border: 2px dashed var(--border); border-radius: 18px;
-            padding: 50px 20px; cursor: pointer; transition: 0.3s;
-            margin-bottom: 20px;
-        }
-        .upload-area:hover { background: rgba(255, 255, 255, 0.05); border-color: var(--accent); }
-        #fileInput { display: none; }
-
-        .btn {
-            background: var(--accent); border: none; padding: 16px; border-radius: 12px;
-            color: #1a1a2e; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem;
-            transition: 0.2s;
-        }
-        .btn:disabled { background: #555; cursor: not-allowed; color: #888; }
-
-        .progress-container { display: none; margin-top: 25px; text-align: left; }
-        .progress-bar { background: var(--border); height: 8px; border-radius: 10px; overflow: hidden; }
-        #progressFill { height: 100%; background: var(--accent); width: 0%; transition: 0.1s; }
-        
-        #successBox { 
-            margin-top: 25px; padding: 20px; background: rgba(0,0,0,0.4); 
-            border-radius: 16px; display: none; text-align: center;
-        }
-        
-        .status-badge {
-            display: inline-block; padding: 6px 14px; border-radius: 20px;
-            font-size: 0.75rem; font-weight: bold; background: rgba(255,255,255,0.1);
-            margin-top: 15px; border: 1px solid var(--border);
-        }
-
-        .copy-main-btn {
-            background: var(--accent); border: none; color: #1a1a2e;
-            padding: 12px 20px; border-radius: 10px; cursor: pointer; 
-            font-size: 0.9rem; font-weight: bold; width: 100%;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CloudShare | Private Transfer</title>
+<style>
+:root { 
+    --glass: rgba(255,255,255,0.1); 
+    --border: rgba(255,255,255,0.2); 
+    --accent: #4ecca3; 
+}
+body{
+    margin:0;height:100vh;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);
+    font-family:'Segoe UI',system-ui,sans-serif;color:white;
+}
+.glass-card{
+    background:var(--glass);backdrop-filter:blur(20px);
+    border:1px solid var(--border);border-radius:28px;
+    padding:40px;width:400px;text-align:center;
+}
+.upload-area{
+    border:2px dashed var(--border);
+    border-radius:18px;padding:50px 20px;
+    cursor:pointer;margin-bottom:20px;
+}
+.upload-area:hover{border-color:var(--accent);}
+#fileInput{display:none;}
+.btn{
+    background:var(--accent);border:none;
+    padding:16px;border-radius:12px;
+    font-weight:bold;width:100%;
+}
+.progress-container{display:none;margin-top:25px;text-align:left;}
+.progress-bar{background:var(--border);height:8px;border-radius:10px;overflow:hidden;}
+#progressFill{height:100%;background:var(--accent);width:0%;}
+#successBox{margin-top:25px;display:none;}
+.copy-main-btn{
+    background:var(--accent);border:none;
+    padding:12px;border-radius:10px;width:100%;
+    font-weight:bold;
+}
+</style>
 </head>
 <body>
 
 <div class="glass-card">
-    <h1>CloudShare</h1>
-    <p class="subtitle">Secure 10GB Transfer</p>
-    
-    <div class="upload-area" id="dropZone">
-        <p id="fileNameDisplay">Select file up to 10GB</p>
-    </div>
-    <input type="file" id="fileInput">
+<h1>CloudShare</h1>
+<p>Select file up to 10GB</p>
 
-    <div class="progress-container" id="progressContainer">
-        <div class="progress-bar"><div id="progressFill"></div></div>
-        <p id="statusText" style="font-size: 0.75rem; margin-top: 8px; opacity: 0.8;">Streaming...</p>
-    </div>
+<div class="upload-area" id="dropZone">
+<p id="fileNameDisplay">Click to select file</p>
+</div>
+<input type="file" id="fileInput">
 
-    <div id="successBox">
-        <button class="copy-main-btn" id="copyBtn">CLICK TO COPY LINK</button>
-        <div id="liveStatus" class="status-badge">Waiting for recipient...</div>
-    </div>
+<div class="progress-container" id="progressContainer">
+<div class="progress-bar"><div id="progressFill"></div></div>
+<p id="statusText">Uploading...</p>
+</div>
 
-    <button class="btn" id="uploadBtn">Start Upload</button>
+<div id="successBox">
+<button class="copy-main-btn" id="copyBtn">CLICK TO COPY LINK</button>
+<div id="liveStatus">Waiting for recipient...</div>
+</div>
+
+<button class="btn" id="uploadBtn">Start Upload</button>
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAD3J4LbHsQmvSgdLW_xaSbxjym3T-4Mw8",
-        authDomain: "dim-transfer.firebaseapp.com",
-        databaseURL: "https://dim-transfer-default-rtdb.firebaseio.com",
-        projectId: "dim-transfer",
-        storageBucket: "dim-transfer.firebasestorage.app",
-        messagingSenderId: "429771611699",
-        appId: "1:429771611699:web:453923495bc3b0adca8d46"
-    };
+const firebaseConfig = {
+apiKey:"AIzaSyAD3J4LbHsQmvSgdLW_xaSbxjym3T-4Mw8",
+authDomain:"dim-transfer.firebaseapp.com",
+databaseURL:"https://dim-transfer-default-rtdb.firebaseio.com",
+projectId:"dim-transfer",
+storageBucket:"dim-transfer.firebasestorage.app",
+messagingSenderId:"429771611699",
+appId:"1:429771611699:web:453923495bc3b0adca8d46"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-    const API_URL = "https://snowy-recipe-1d49.indielumo.workers.dev";
-    const fileInput = document.getElementById('fileInput');
-    const uploadBtn = document.getElementById('uploadBtn');
-    const progressFill = document.getElementById('progressFill');
-    const statusText = document.getElementById('statusText');
-    const successBox = document.getElementById('successBox');
-    const liveStatus = document.getElementById('liveStatus');
-    const copyBtn = document.getElementById('copyBtn');
+const API_URL = "https://snowy-recipe-1d49.indielumo.workers.dev";
 
-    document.getElementById('dropZone').onclick = () => fileInput.click();
-    fileInput.onchange = (e) => {
-        if(e.target.files[0]) document.getElementById('fileNameDisplay').innerText = e.target.files[0].name;
-    };
+const fileInput = document.getElementById('fileInput');
+const uploadBtn = document.getElementById('uploadBtn');
+const progressFill = document.getElementById('progressFill');
+const statusText = document.getElementById('statusText');
+const successBox = document.getElementById('successBox');
+const copyBtn = document.getElementById('copyBtn');
+const liveStatus = document.getElementById('liveStatus');
 
-    uploadBtn.onclick = async () => {
-        const file = fileInput.files[0];
-        if(!file) return alert("Select a file!");
+document.getElementById('dropZone').onclick = () => fileInput.click();
 
-        uploadBtn.style.display = 'none';
-        document.getElementById('progressContainer').style.display = 'block';
+fileInput.onchange = (e)=>{
+if(e.target.files[0])
+document.getElementById('fileNameDisplay').innerText = e.target.files[0].name;
+};
 
-        try {
-            const res = await fetch(`${API_URL}/get-upload-url?filename=${encodeURIComponent(file.name)}`);
-            const { uploadUrl, fileKey } = await res.json();
+uploadBtn.onclick = async ()=>{
+const file = fileInput.files[0];
+if(!file) return alert("Select a file!");
 
-            const xhr = new XMLHttpRequest();
-            xhr.open('PUT', uploadUrl, true);
-            
-            xhr.upload.onprogress = (e) => {
-                if (e.lengthComputable) {
-                    const percent = Math.round((e.loaded / e.total) * 100);
-                    progressFill.style.width = percent + '%';
-                    statusText.innerText = `Uploading: ${percent}%`;
-                }
-            };
+uploadBtn.style.display='none';
+document.getElementById('progressContainer').style.display='block';
 
-            xhr.onload = () => {
-                if (xhr.status === 200) {
-                    document.getElementById('progressContainer').style.display = 'none';
-                    successBox.style.display = 'block';
-                    const downloadUrl = `${API_URL}/download/${fileKey}`;
-                    
-                    // --- LIVE FIREBASE LISTENER ---
-                    const statusRef = ref(db, 'transfers/' + fileKey);
-                    onValue(statusRef, (snapshot) => {
-                        const data = snapshot.val();
-                        if (data && data.status === 'downloaded') {
-                            liveStatus.innerText = "✅ RECIPIENT DOWNLOADED";
-                            liveStatus.style.color = "#ff4e4e";
-                            copyBtn.disabled = true;
-                            copyBtn.innerText = "FILE DELETED";
-                            copyBtn.style.background = "#333";
-                        }
-                    });
+try{
+const res = await fetch(`${API_URL}/get-upload-url?filename=${encodeURIComponent(file.name)}`);
+const { uploadUrl, fileKey } = await res.json();
 
-                    copyBtn.onclick = () => {
-                        navigator.clipboard.writeText(downloadUrl);
-                        copyBtn.innerText = "LINK COPIED!";
-                        setTimeout(() => copyBtn.innerText = "CLICK TO COPY LINK", 2000);
-                    };
-                }
-            };
-            xhr.send(file);
-        } catch (err) {
-            alert("Upload Error");
-            uploadBtn.style.display = 'block';
-        }
-    };
+const xhr = new XMLHttpRequest();
+xhr.open('PUT', uploadUrl, true);
+
+/* ✅ IMPORTANT FIX */
+xhr.setRequestHeader("Content-Type", "application/octet-stream");
+
+xhr.upload.onprogress = (e)=>{
+if(e.lengthComputable){
+const percent = Math.round((e.loaded/e.total)*100);
+progressFill.style.width = percent+'%';
+statusText.innerText = `Uploading: ${percent}%`;
+}
+};
+
+xhr.onload = ()=>{
+if(xhr.status===200){
+document.getElementById('progressContainer').style.display='none';
+successBox.style.display='block';
+
+const downloadUrl = `${API_URL}/download/${fileKey}`;
+
+const statusRef = ref(db,'transfers/'+fileKey);
+onValue(statusRef,(snapshot)=>{
+const data = snapshot.val();
+if(data && data.status==="downloaded"){
+liveStatus.innerText="Recipient Downloaded";
+copyBtn.disabled=true;
+}
+});
+
+copyBtn.onclick=()=>{
+navigator.clipboard.writeText(downloadUrl);
+copyBtn.innerText="LINK COPIED!";
+setTimeout(()=>copyBtn.innerText="CLICK TO COPY LINK",2000);
+};
+}
+};
+
+xhr.onerror=()=>{
+alert("Upload Failed");
+uploadBtn.style.display='block';
+};
+
+xhr.send(file);
+
+}catch(err){
+alert("Upload Error");
+uploadBtn.style.display='block';
+}
+};
 </script>
 </body>
 </html>
