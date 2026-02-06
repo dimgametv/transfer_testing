@@ -163,7 +163,7 @@ function showError(msg) {
 // Update progress
 function updateProgress(percent, status) {
     progressFill.style.width = percent + '%';
-    progressPercent.textContent = percent + '%';
+    progressPercent.textContent = Math.round(percent) + '%';
     if (status) statusText.textContent = status;
 }
 
@@ -198,7 +198,7 @@ function handleFileSelect(file) {
     errorMsg.style.display = 'none';
 }
 
-// ========== SIMPLE UPLOAD (for small files) ==========
+// ========== SIMPLE UPLOAD (for small files < 50MB) ==========
 async function simpleUpload(file, uploadUrl, fileKey) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -206,7 +206,7 @@ async function simpleUpload(file, uploadUrl, fileKey) {
 
         xhr.upload.onprogress = (e) => {
             if (e.lengthComputable) {
-                const percent = Math.round((e.loaded / e.total) * 100);
+                const percent = (e.loaded / e.total) * 100;
                 updateProgress(percent, 'Uploading...');
             }
         };
@@ -224,7 +224,7 @@ async function simpleUpload(file, uploadUrl, fileKey) {
     });
 }
 
-// ========== MULTIPART UPLOAD (for large files) ==========
+// ========== MULTIPART UPLOAD (for large files >= 50MB) ==========
 async function multipartUpload(file, fileKey, uploadId, totalParts, chunkSize) {
     const parts = [];
     let uploadedBytes = 0;
@@ -234,29 +234,23 @@ async function multipartUpload(file, fileKey, uploadId, totalParts, chunkSize) {
         const end = Math.min(start + chunkSize, file.size);
         const chunk = file.slice(start, end);
 
-        // Get signed URL for this part
-        statusText.textContent = `Preparing part ${partNumber}/${totalParts}...`;
-        
-        const urlRes = await fetch(
-            `${API_URL}/get-part-url?fileKey=${encodeURIComponent(fileKey)}&uploadId=${encodeURIComponent(uploadId)}&partNumber=${partNumber}`
-        );
-        
-        if (!urlRes.ok) throw new Error('Failed to get part URL');
-        const { partUrl } = await urlRes.json();
+        updateProgress((uploadedBytes / file.size) * 100, `Uploading part ${partNumber}/${totalParts}...`);
 
-        // Upload this chunk with retry logic
-        const etag = await uploadChunkWithRetry(chunk, partUrl, partNumber, totalParts, (chunkProgress) => {
-            const totalProgress = ((uploadedBytes + chunkProgress) / file.size) * 100;
-            updateProgress(Math.round(totalProgress), `Uploading part ${partNumber}/${totalParts}...`);
+        // Upload chunk through worker (bypasses CORS issues)
+        const result = await uploadChunkViaWorker(fileKey, uploadId, partNumber, chunk, totalParts);
+
+        parts.push({
+            partNumber: result.partNumber,
+            etag: result.etag
         });
 
-        parts.push({ partNumber, etag });
         uploadedBytes += chunk.size;
+        updateProgress((uploadedBytes / file.size) * 100, `Uploaded part ${partNumber}/${totalParts}`);
     }
 
     // Complete multipart upload
-    statusText.textContent = 'Finalizing upload...';
-    
+    updateProgress(99, 'Finalizing upload...');
+
     const completeRes = await fetch(`${API_URL}/complete-upload`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -271,57 +265,38 @@ async function multipartUpload(file, fileKey, uploadId, totalParts, chunkSize) {
     return fileKey;
 }
 
-// Upload chunk with retry
-async function uploadChunkWithRetry(chunk, url, partNumber, totalParts, onProgress, maxRetries = 3) {
+// Upload chunk via worker proxy (avoids CORS issues with R2)
+async function uploadChunkViaWorker(fileKey, uploadId, partNumber, chunk, totalParts, maxRetries = 3) {
     let lastError;
-    
+
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
-            return await uploadChunk(chunk, url, onProgress);
+            const url = `${API_URL}/upload-part?fileKey=${encodeURIComponent(fileKey)}&uploadId=${encodeURIComponent(uploadId)}&partNumber=${partNumber}`;
+
+            const response = await fetch(url, {
+                method: 'POST',
+                body: chunk
+            });
+
+            if (!response.ok) {
+                const errText = await response.text();
+                throw new Error(`Part ${partNumber} failed: ${errText}`);
+            }
+
+            return await response.json();
+
         } catch (error) {
             lastError = error;
             console.log(`Part ${partNumber} attempt ${attempt} failed:`, error.message);
-            
+
             if (attempt < maxRetries) {
                 statusText.textContent = `Retrying part ${partNumber}... (attempt ${attempt + 1})`;
-                await new Promise(r => setTimeout(r, 2000 * attempt)); // Exponential backoff
+                await new Promise(r => setTimeout(r, 2000 * attempt));
             }
         }
     }
-    
+
     throw lastError;
-}
-
-// Upload single chunk
-function uploadChunk(chunk, url, onProgress) {
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open('PUT', url, true);
-
-        xhr.upload.onprogress = (e) => {
-            if (e.lengthComputable) onProgress(e.loaded);
-        };
-
-        xhr.onload = () => {
-            if (xhr.status === 200) {
-                // Get ETag from response headers
-                let etag = xhr.getResponseHeader('ETag');
-                if (etag) {
-                    // Clean up ETag (remove quotes if present)
-                    etag = etag.replace(/"/g, '');
-                }
-                resolve(etag || 'etag-' + Date.now());
-            } else {
-                reject(new Error('Chunk upload failed: ' + xhr.status));
-            }
-        };
-
-        xhr.onerror = () => reject(new Error('Network error during chunk upload'));
-        xhr.ontimeout = () => reject(new Error('Chunk upload timeout'));
-        
-        xhr.timeout = 300000; // 5 minute timeout per chunk
-        xhr.send(chunk);
-    });
 }
 
 // ========== MAIN UPLOAD HANDLER ==========
@@ -351,15 +326,21 @@ uploadBtn.onclick = async () => {
         const initRes = await fetch(
             `${API_URL}/initiate-upload?filename=${encodeURIComponent(file.name)}&size=${file.size}`
         );
-        
-        if (!initRes.ok) throw new Error('Failed to initiate upload');
+
+        if (!initRes.ok) {
+            const errData = await initRes.json().catch(() => ({}));
+            throw new Error(errData.error || 'Failed to initiate upload');
+        }
+
         const initData = await initRes.json();
+        console.log('Init response:', initData);
 
         fileKey = initData.fileKey;
 
         // Step 2: Upload based on mode
         if (initData.mode === 'simple') {
             // Small file - direct upload
+            updateProgress(0, 'Uploading file...');
             await simpleUpload(file, initData.uploadUrl, fileKey);
         } else {
             // Large file - multipart upload
@@ -403,7 +384,7 @@ uploadBtn.onclick = async () => {
 
     } catch (error) {
         console.error('Upload error:', error);
-        
+
         // Abort multipart upload if it was started
         if (uploadId && fileKey) {
             try {
@@ -416,7 +397,7 @@ uploadBtn.onclick = async () => {
                 console.log('Abort cleanup failed:', e);
             }
         }
-        
+
         showError(error.message || 'Upload failed. Please try again.');
     }
 };
