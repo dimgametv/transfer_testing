@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudShare | 10GB Transfer</title>
+    <style>
+        :root { --glass: rgba(255, 255, 255, 0.1); --border: rgba(255, 255, 255, 0.2); }
+        body {
+            margin: 0; height: 100vh; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            font-family: 'Segoe UI', sans-serif; color: white;
+        }
+        .glass-card {
+            background: var(--glass); backdrop-filter: blur(15px);
+            border: 1px solid var(--border); border-radius: 24px;
+            padding: 40px; width: 400px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        .upload-area {
+            border: 2px dashed var(--border); border-radius: 15px;
+            padding: 40px 20px; cursor: pointer; margin-bottom: 20px;
+        }
+        #fileInput { display: none; }
+        .btn {
+            background: #4ecca3; border: none; padding: 15px; border-radius: 10px;
+            color: #1a1a2e; font-weight: bold; cursor: pointer; width: 100%;
+        }
+        .progress-container { display: none; margin-top: 20px; }
+        .progress-bar { background: var(--border); height: 10px; border-radius: 5px; overflow: hidden; }
+        #progressFill { height: 100%; background: #4ecca3; width: 0%; transition: 0.1s; }
+        #shareLink { 
+            margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3); 
+            border-radius: 10px; word-break: break-all; display: none; font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="glass-card">
+    <h1>CloudShare</h1>
+    <div class="upload-area" id="dropZone">
+        <p id="fileNameDisplay">Select a file (Up to 10GB)</p>
+    </div>
+    <input type="file" id="fileInput">
+
+    <div class="progress-container" id="progressContainer">
+        <div class="progress-bar"><div id="progressFill"></div></div>
+        <p id="statusText" style="font-size: 0.8rem; margin-top: 8px;">Uploading... 0%</p>
+    </div>
+
+    <div id="shareLink" id="linkBox"></div>
+    <button class="btn" id="uploadBtn">Start Transfer</button>
+</div>
+
+<script>
+    const API_URL = "https://snowy-recipe-1d49.indielumo.workers.dev"; 
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const progressFill = document.getElementById('progressFill');
+    const statusText = document.getElementById('statusText');
+    const shareLink = document.getElementById('shareLink');
+
+    document.getElementById('dropZone').onclick = () => fileInput.click();
+    fileInput.onchange = (e) => {
+        if(e.target.files[0]) document.getElementById('fileNameDisplay').innerText = e.target.files[0].name;
+    };
+
+    uploadBtn.onclick = async () => {
+        const file = fileInput.files[0];
+        if(!file) return alert("Please select a file.");
+
+        uploadBtn.disabled = true;
+        document.getElementById('progressContainer').style.display = 'block';
+
+        try {
+            // 1. Get Proxy URL
+            const res = await fetch(`${API_URL}/get-upload-url?filename=${encodeURIComponent(file.name)}`);
+            const { uploadUrl, fileKey } = await res.json();
+
+            // 2. Upload using XMLHttpRequest (to track 10GB progress accurately)
+            const xhr = new XMLHttpRequest();
+            xhr.open('PUT', uploadUrl, true);
+            
+            xhr.upload.onprogress = (e) => {
+                if (e.lengthComputable) {
+                    const percent = Math.round((e.loaded / e.total) * 100);
+                    progressFill.style.width = percent + '%';
+                    statusText.innerText = `Uploading... ${percent}%`;
+                }
+            };
+
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    statusText.innerText = "Complete!";
+                    shareLink.style.display = 'block';
+                    shareLink.innerHTML = `<strong>Secure Download Link:</strong><br>${API_URL}/download/${fileKey}`;
+                } else {
+                    alert("Upload failed. Verify R2 Bucket binding.");
+                }
+            };
+
+            xhr.send(file);
+        } catch (err) {
+            alert("Error: Check your Worker URL and CORS settings.");
+            uploadBtn.disabled = false;
+        }
+    };
+</script>
+</body>
+</html>
