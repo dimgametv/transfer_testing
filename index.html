@@ -7,6 +7,7 @@
     <title>Sendra | By XRV LABS</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
         /* --- VARIABLES --- */
@@ -267,6 +268,59 @@
             background: rgba(255, 107, 107, 0.1); border-radius: 10px; border: 1px solid var(--error-color);
         }
 
+        /* --- QR CODE --- */
+        .qr-container {
+            margin: 20px auto;
+            padding: 10px;
+            background: #fff; /* QR needs white background */
+            width: 150px; height: 150px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        #qrcode img { margin: 0 auto; }
+
+        /* --- LIVE TRAFFIC DASHBOARD --- */
+        .traffic-card {
+            width: 90%; max-width: 500px;
+            background: var(--bg-color);
+            border-radius: var(--card-radius);
+            padding: 25px;
+            box-shadow: var(--shadow-outer);
+            margin-top: 25px;
+        }
+        
+        .traffic-header {
+            font-family: 'Orbitron'; font-size: 0.9rem; color: var(--text-main);
+            margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .queue-list {
+            display: flex; flex-direction: column; gap: 10px;
+            max-height: 200px; overflow-y: auto;
+        }
+
+        .queue-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 15px; border-radius: 10px;
+            background: var(--bg-color);
+            box-shadow: var(--shadow-inner);
+            font-size: 0.75rem; font-family: 'Exo 2'; font-weight: 600;
+        }
+
+        .user-id { color: var(--text-sub); display: flex; align-items: center; gap: 8px; }
+        .op-type { font-weight: 700; font-family: 'Orbitron'; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+        .op-type.upload { background: rgba(78, 204, 163, 0.2); color: var(--accent-color); }
+        .op-type.download { background: rgba(241, 196, 15, 0.2); color: var(--warning-color); }
+        
+        .queue-info { color: var(--text-main); font-size: 0.7rem; }
+
+        .free-time-estimate {
+            margin-top: 15px; padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.75rem; color: var(--text-sub);
+            text-align: center;
+        }
+
         /* --- FOOTER --- */
         footer { 
             margin-top: 30px; color: var(--text-sub); font-size: 0.75rem; 
@@ -290,7 +344,7 @@
         @media (max-width: 600px) {
             header { padding: 15px 0; width: 92%; }
             .info-card { width: 92%; padding: 12px 15px; }
-            .main-card {
+            .main-card, .traffic-card {
                 width: 92%; 
                 padding: 30px 20px; 
                 margin-top: 5px;
@@ -380,13 +434,27 @@
         <div id="successBox">
             <div class="status-box">
                 <div class="verify-info" id="verifyInfo"></div>
-                <div id="liveStatus" style="color: var(--text-sub); font-size: 0.8rem;">⏳ Waiting for recipient...</div>
+                <div class="qr-container" id="qrcode"></div>
+                <div id="liveStatus" style="color: var(--text-sub); font-size: 0.8rem; text-align:center;">⏳ Waiting for recipient...</div>
             </div>
             <br>
             <button class="btn copy-btn" id="copyBtn">📋 COPY DOWNLOAD LINK</button>
         </div>
 
         <button class="btn" id="uploadBtn" disabled>🚀 START TRANSFER</button>
+    </div>
+
+    <div class="traffic-card">
+        <div class="traffic-header">
+            <span>📡 LIVE TRAFFIC CONTROL</span>
+            <span class="live-dot" style="animation-duration: 0.8s;"></span>
+        </div>
+        <div class="queue-list" id="queueList">
+            <div style="text-align: center; color: var(--text-sub); font-size: 0.8rem; padding: 10px;">Waiting for network data...</div>
+        </div>
+        <div class="free-time-estimate" id="freeTimeEstimate">
+            Estimated wait time: <span style="color: var(--accent-color);">0s</span>
+        </div>
     </div>
 
     <footer>
@@ -447,6 +515,7 @@
         const fileNameDisplay = document.getElementById('fileNameDisplay');
         const fileSizeDisplay = document.getElementById('fileSizeDisplay');
         const fileWarning = document.getElementById('fileWarning');
+        const qrcodeContainer = document.getElementById('qrcode');
         
         // Queue UI Elements
         const systemStatus = document.getElementById('systemStatus');
@@ -456,6 +525,8 @@
         const storageFree = document.getElementById('storageFree');
         const activeOpsCount = document.getElementById('activeOpsCount');
         const connectionLost = document.getElementById('connectionLost');
+        const queueList = document.getElementById('queueList');
+        const freeTimeEstimate = document.getElementById('freeTimeEstimate');
 
         // --- STATE ---
         let currentSystemState = {
@@ -463,6 +534,7 @@
             freeBytes: TOTAL_STORAGE_LIMIT,
             activeOperations: 0
         };
+        let activeOpsData = {};
         let selectedFile = null;
         let uploadStartTime;
         let lastLoaded = 0;
@@ -488,6 +560,12 @@
             if (bytesPerSecond < 1024) return bytesPerSecond.toFixed(0) + ' B/s';
             if (bytesPerSecond < 1024 * 1024) return (bytesPerSecond / 1024).toFixed(1) + ' KB/s';
             return (bytesPerSecond / (1024 * 1024)).toFixed(2) + ' MB/s';
+        }
+
+        function generateUserHash(id) {
+            // Create a fake stylish ID like "USER-X7A"
+            const hash = id.split('-').pop().substring(0, 3).toUpperCase();
+            return `USER-${hash}`;
         }
 
         function showError(msg) {
@@ -523,6 +601,60 @@
                 
                 lastLoaded = loaded;
                 lastTime = now;
+            }
+        }
+
+        // ===== LIVE TRAFFIC VISUALIZATION =====
+        function renderLiveQueue(opsData) {
+            activeOpsData = opsData || {};
+            const ops = Object.values(activeOpsData).filter(op => op.active);
+            
+            queueList.innerHTML = '';
+            
+            if (ops.length === 0) {
+                queueList.innerHTML = '<div style="text-align: center; color: var(--text-sub); font-size: 0.8rem; padding: 10px;">System Idle. Ready for transfer.</div>';
+                freeTimeEstimate.innerHTML = 'Status: <span style="color: var(--accent-color);">Prime Condition</span>';
+                return;
+            }
+
+            let activeDownloadsSize = 0;
+
+            ops.forEach(op => {
+                const item = document.createElement('div');
+                item.className = 'queue-item';
+                
+                const typeClass = op.type === 'upload' ? 'upload' : 'download';
+                const typeIcon = op.type === 'upload' ? '⬆' : '⬇';
+                const userDisplay = generateUserHash(op.id || 'unknown');
+                const fileInfo = op.type === 'upload' ? `Uploading ${formatSize(op.fileSize)}` : `Downloading...`;
+
+                // Calculate active downloads for estimation
+                if (op.type === 'download') activeDownloadsSize += op.fileSize;
+
+                item.innerHTML = `
+                    <div class="user-id">
+                        <span class="status-dot" style="width: 6px; height: 6px;"></span>
+                        ${userDisplay}
+                    </div>
+                    <div class="queue-info">${fileInfo}</div>
+                    <div class="op-type ${typeClass}">${typeIcon} ${op.type}</div>
+                `;
+                queueList.appendChild(item);
+            });
+
+            // Estimate Free Time (Logic: 10GB Limit. If full, we wait for downloads)
+            const isFull = currentSystemState.usedBytes > (TOTAL_STORAGE_LIMIT * 0.95);
+            if (isFull) {
+                if (activeDownloadsSize > 0) {
+                    // Assume conservative 5MB/s global download speed
+                    const estSeconds = activeDownloadsSize / (5 * 1024 * 1024); 
+                    const timeStr = estSeconds > 60 ? `${Math.ceil(estSeconds/60)}m` : `${Math.ceil(estSeconds)}s`;
+                    freeTimeEstimate.innerHTML = `Storage Full. Estimated availability: <span style="color: var(--warning-color);">${timeStr}</span>`;
+                } else {
+                    freeTimeEstimate.innerHTML = `Storage Full. <span style="color: var(--error-color);">Waiting for downloads to start...</span>`;
+                }
+            } else {
+                freeTimeEstimate.innerHTML = 'Estimated wait time: <span style="color: var(--accent-color);">0s (Instant)</span>';
             }
         }
 
@@ -639,10 +771,12 @@
                 }
             });
 
-            // Listen to active operations
+            // Listen to active operations (For Live Queue)
             const opsRef = ref(db, 'system/activeOperations');
             onValue(opsRef, (snapshot) => {
                 const data = snapshot.val();
+                renderLiveQueue(data);
+                
                 const count = data ? Object.keys(data).filter(k => data[k] && data[k].active).length : 0;
                 currentSystemState.activeOperations = count;
                 updateSystemUI();
@@ -851,6 +985,7 @@
             errorMsg.style.display = 'none';
             uploadBtn.style.display = 'none';
             successBox.style.display = 'none';
+            qrcodeContainer.innerHTML = ''; // Clear previous QR
             progressSection.style.display = 'block';
             speedInfo.textContent = '';
             dropZone.classList.add('disabled');
@@ -911,6 +1046,16 @@
                 const downloadUrl = `${API_URL}/download/${encodeURIComponent(fileKey)}`;
                 verifyInfo.innerHTML = `✅ VERIFIED: ${formatSize(verification.size)}`;
                 
+                // --- GENERATE QR CODE ---
+                new QRCode(qrcodeContainer, {
+                    text: downloadUrl,
+                    width: 128,
+                    height: 128,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H
+                });
+
                 // Refresh system status
                 await fetchSystemStatus();
 
