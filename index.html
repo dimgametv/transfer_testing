@@ -72,13 +72,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
 const firebaseConfig = {
-apiKey:"AIzaSyAD3J4LbHsQmvSgdLW_xaSbxjym3T-4Mw8",
-authDomain:"dim-transfer.firebaseapp.com",
-databaseURL:"https://dim-transfer-default-rtdb.firebaseio.com",
-projectId:"dim-transfer",
-storageBucket:"dim-transfer.firebasestorage.app",
-messagingSenderId:"429771611699",
-appId:"1:429771611699:web:453923495bc3b0adca8d46"
+  apiKey:"AIzaSyAD3J4LbHsQmvSgdLW_xaSbxjym3T-4Mw8",
+  authDomain:"dim-transfer.firebaseapp.com",
+  databaseURL:"https://dim-transfer-default-rtdb.firebaseio.com",
+  projectId:"dim-transfer",
+  storageBucket:"dim-transfer.firebasestorage.app",
+  messagingSenderId:"429771611699",
+  appId:"1:429771611699:web:453923495bc3b0adca8d46"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -97,71 +97,76 @@ const liveStatus = document.getElementById('liveStatus');
 document.getElementById('dropZone').onclick = () => fileInput.click();
 
 fileInput.onchange = (e)=>{
-if(e.target.files[0])
-document.getElementById('fileNameDisplay').innerText = e.target.files[0].name;
+  if(e.target.files[0])
+    document.getElementById('fileNameDisplay').innerText = e.target.files[0].name;
 };
 
 uploadBtn.onclick = async ()=>{
-const file = fileInput.files[0];
-if(!file) return alert("Select a file!");
 
-uploadBtn.style.display='none';
-document.getElementById('progressContainer').style.display='block';
+  const file = fileInput.files[0];
+  if(!file) return alert("Select a file!");
 
-try{
-const res = await fetch(`${API_URL}/get-upload-url?filename=${encodeURIComponent(file.name)}`);
-const { uploadUrl, fileKey } = await res.json();
+  uploadBtn.style.display='none';
+  document.getElementById('progressContainer').style.display='block';
 
-const xhr = new XMLHttpRequest();
-xhr.open('PUT', uploadUrl, true);
+  try{
 
-/* ✅ IMPORTANT FIX */
-xhr.setRequestHeader("Content-Type", "application/octet-stream");
+    const res = await fetch(`${API_URL}/get-upload-url?filename=${encodeURIComponent(file.name)}`);
+    const { uploadUrl, fileKey } = await res.json();
 
-xhr.upload.onprogress = (e)=>{
-if(e.lengthComputable){
-const percent = Math.round((e.loaded/e.total)*100);
-progressFill.style.width = percent+'%';
-statusText.innerText = `Uploading: ${percent}%`;
-}
-};
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', uploadUrl, true);
 
-xhr.onload = ()=>{
-if(xhr.status===200){
-document.getElementById('progressContainer').style.display='none';
-successBox.style.display='block';
+    xhr.upload.onprogress = (e)=>{
+      if(e.lengthComputable){
+        const percent = Math.round((e.loaded/e.total)*100);
+        progressFill.style.width = percent+'%';
+        statusText.innerText = `Uploading: ${percent}%`;
+      }
+    };
 
-const downloadUrl = `${API_URL}/download/${fileKey}`;
+    xhr.onload = ()=>{
+      if(xhr.status===200){
 
-const statusRef = ref(db,'transfers/'+fileKey);
-onValue(statusRef,(snapshot)=>{
-const data = snapshot.val();
-if(data && data.status==="downloaded"){
-liveStatus.innerText="Recipient Downloaded";
-copyBtn.disabled=true;
-}
-});
+        document.getElementById('progressContainer').style.display='none';
+        successBox.style.display='block';
 
-copyBtn.onclick=()=>{
-navigator.clipboard.writeText(downloadUrl);
-copyBtn.innerText="LINK COPIED!";
-setTimeout(()=>copyBtn.innerText="CLICK TO COPY LINK",2000);
-};
-}
-};
+        const downloadUrl = `${API_URL}/download/${fileKey}`;
 
-xhr.onerror=()=>{
-alert("Upload Failed");
-uploadBtn.style.display='block';
-};
+        const statusRef = ref(db,'transfers/'+fileKey);
+        onValue(statusRef,(snapshot)=>{
+          const data = snapshot.val();
+          if(data && data.status==="downloaded"){
+            liveStatus.innerText="Recipient Downloaded";
+            copyBtn.disabled=true;
+          }
+        });
 
-xhr.send(file);
+        copyBtn.onclick=()=>{
+          navigator.clipboard.writeText(downloadUrl);
+          copyBtn.innerText="LINK COPIED!";
+          setTimeout(()=>copyBtn.innerText="CLICK TO COPY LINK",2000);
+        };
 
-}catch(err){
-alert("Upload Error");
-uploadBtn.style.display='block';
-}
+      } else {
+        alert("Upload failed: " + xhr.status);
+        uploadBtn.style.display='block';
+      }
+    };
+
+    xhr.onerror=()=>{
+      alert("Upload Error");
+      uploadBtn.style.display='block';
+    };
+
+    xhr.send(file);
+
+  } catch(err){
+    alert("Upload Error");
+    uploadBtn.style.display='block';
+  }
 };
 </script>
+
 </body>
 </html>
