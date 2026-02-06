@@ -577,10 +577,10 @@
                 statusLabel.textContent = 'STORAGE FULL';
                 systemStatus.classList.add('full');
             } else if (activeOperations > 0) {
-                statusLabel.textContent = 'ONLINE & BUSY';
+                statusLabel.textContent = 'BUSY';
                 systemStatus.classList.add('busy');
             } else {
-                statusLabel.textContent = 'ONLINE & READY';
+                statusLabel.textContent = 'READY';
             }
             
             updateButtonState();
